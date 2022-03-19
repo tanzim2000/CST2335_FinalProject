@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CST2335_finalProject</string>
+    <string name="searchMsg">Input a City Name You want to search</string>
+    <string name="searchHint1">Input the City Name Here</string>
+    <string name="searchHint2">Input search radius by Kilometer Here</string>
+    <string name="searchBt">Search The Events </string>
 </resources>
