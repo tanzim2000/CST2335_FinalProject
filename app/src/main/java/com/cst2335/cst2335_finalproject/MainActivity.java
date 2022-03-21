@@ -2,6 +2,8 @@ package com.cst2335.cst2335_finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,18 +17,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,10 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     MyOpener myOpenHelper;
     SQLiteDatabase eventDB;
-    boolean isTablet;
-    public ArrayList<Events> eventList = new ArrayList<>(  );
     AsyncTask searchTask;
-    //MyListAdapter myAdapter;
+
+    Intent goToEvent;
     String searchURL;
     EditText etCity;
     EditText searchR;
@@ -56,25 +51,32 @@ public class MainActivity extends AppCompatActivity {
          pgbar = findViewById(R.id.pgbar);
          cancelBt = findViewById( R.id.cancelBt);
 
+         //create a preference file to save the latest input;
         SharedPreferences prefs = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         etCity.setText(prefs.getString(ACTIVITY_NAME, ""));
+
+        //open the database save the search result
+        myOpenHelper = new MyOpener(this);
+        eventDB = myOpenHelper.getWritableDatabase();
+        int version = MyOpener.VERSION;
+        myOpenHelper.onUpgrade(eventDB,version,version+1);
 
         Button searchBt = findViewById(R.id.searchBt);
         searchBt.setOnClickListener((click) ->
         {
-
+            //get user input to create search URL:
             String cityIn = etCity.getText().toString();
             String RadiusIn = searchR.getText().toString();
             searchURL =  "https://app.ticketmaster.com/discovery/v2/events.json?apikey="
                     + COSTUMER_KEY+"&city="+cityIn+"&radius="+RadiusIn ;
+
             //create new AsyncTask to search the events
             MyHTTPRequest searchTask = new MyHTTPRequest();
             searchTask.execute(searchURL);  //AsyncTask Type 1
 
             //go to Profile page
             String searchHst = etCity.getText().toString();
-            Intent goToEvent = new Intent(MainActivity.this ,EventList.class);
-           // goToEvent.putExtra(PREFERENCES_FILE, searchHst);
+            goToEvent = new Intent(MainActivity.this ,EventList.class);
 
             //Save user input data to preference_file
             SharedPreferences.Editor writer = prefs.edit();
@@ -84,18 +86,14 @@ public class MainActivity extends AppCompatActivity {
             //Make the transition:
             //startActivity(goToEvent);
 
-
         });
 
         //Click cancel button to stop the search progress immediately
-        cancelBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchTask.cancel(true);
-            }});
+        cancelBt.setOnClickListener(view -> searchTask.cancel(true));
     }
 
     //create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
+    @SuppressLint("StaticFieldLeak")
     private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String>
     {
         //static private final String TAG = "MyHTTPRequest";
@@ -110,62 +108,47 @@ public class MainActivity extends AppCompatActivity {
             //open the connection
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-                // Starts the search
-                urlConnection.connect();
-
             //wait for data:
             InputStream response = urlConnection.getInputStream();
 
-            //Create a Pull parser uses the Factory pattern
-          /*XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            factory.setNamespaceAware(false);
-            XmlPullParser xpp = factory.newPullParser();
-            xpp.setInput( response  , "UTF-8");*/
 
             //JSON reading:
             //Build the entire string response:
             BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
             StringBuilder sb = new StringBuilder();
 
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null)
             {
-                sb.append(line + "\n");
+                sb.append(line).append("\n");
             }
             String result = sb.toString(); //result is the whole string
 
-
             // convert string to JSON: Look at slide 27:
             JSONObject webResult = new JSONObject(result);
-                JSONArray eventArray = webResult.getJSONObject("_embedded").getJSONArray("events");
-                JSONObject anEvent = eventArray.getJSONObject(0);
-                String eventName = anEvent.getString("name");
-            /*
-                String nameArray[]=null;
+            JSONArray jSONEventArray = webResult.getJSONObject("_embedded")
+                    .getJSONArray("events");
+               // JSONObject anEvent = jSONEventArray.getJSONObject(0);
 
-                for (int i=0; i < eventArray.length(); i++)
-                    try {
-                        JSONObject anEvent = eventArray.getJSONObject(i);
+                for (int i=0; i < jSONEventArray.length(); i++){
+                   JSONObject anEvent = jSONEventArray.getJSONObject(i);
 
-                         // Pulling items from the array
-                        String eventName= anEvent.getString("name");
-                        nameArray[i]=eventName;
-                        //anEvent.getString("url");
+                    // Pulling items from the array to SQLite
+                    String eventName= anEvent.getString("name");
+                    String eventURL= anEvent.getString("url");
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } */
-
-            //get the double associated with "value"
-            //int numEntries = eventResult.getInt("count");
+                    ContentValues newRow = new ContentValues();
+                    newRow.put(MyOpener.COL_EventName,eventName);
+                    newRow.put(MyOpener.COL_URL,eventURL);
+                    long id = eventDB.insert(MyOpener.TABLE_NAME,null,newRow);
+                    }
 
           //  publishProgress(25);
             //Thread.sleep(1000);
            // publishProgress(50);
-                Log.i(TAG, "Num of entries: " + eventName);
 
             }
-        catch (Exception e)
+        catch (Exception ignored)
         {
 
         }
@@ -182,43 +165,11 @@ public class MainActivity extends AppCompatActivity {
     //Type3
     public void onPostExecute(String fromDoInBackground)
     {
-        Log.i(TAG, fromDoInBackground);
+        //Make the transition:
+       startActivity(goToEvent);
+       Log.i(TAG, fromDoInBackground);
     }
 
-        public void execute(int i) {
-        }
     }
 
-    //It creates an instance of the List View
-    // private class MyListAdapter extends BaseAdapter { }
-
-    //create Events class to set up Arraylist
-    public class Events{
-
-        long id;
-        String eventName;
-        Date startDate;
-        double minPrice;
-        double maxPrice;
-        String ticketMasterURL;
-
-        public void Evnets(long id, String eventName, Date startDate,
-                           double minPrice, double maxPrice, String ticketMasterURL)
-        {
-            this.id=id;
-            this.eventName=eventName;
-            this.startDate=startDate;
-            this.minPrice=minPrice;
-            this.maxPrice=maxPrice;
-            this.ticketMasterURL=ticketMasterURL;
-
-        }
-
-        public long getId(){return id;}
-        public String getEventName(){return eventName;}
-        public Date getStartDate(){return startDate;}
-        public double getMinPrice(){return minPrice;}
-        public double getMaxPrice(){return maxPrice;}
-        public String getTicketMasterURL(){return ticketMasterURL;}
-    }
 }

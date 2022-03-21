@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CST2335_finalProject">
         <activity
+            android:name=".EmptyActivity"
+            android:exported="false" />
+        <activity
             android:name=".EventList"
             android:exported="false" />
         <activity
