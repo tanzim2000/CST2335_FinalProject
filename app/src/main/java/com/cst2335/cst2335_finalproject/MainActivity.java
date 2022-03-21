@@ -138,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
             // convert string to JSON: Look at slide 27:
             JSONObject webResult = new JSONObject(result);
                 JSONArray eventArray = webResult.getJSONObject("_embedded").getJSONArray("events");
+                JSONObject anEvent = eventArray.getJSONObject(0);
+                String eventName = anEvent.getString("name");
             /*
                 String nameArray[]=null;
 
@@ -160,9 +162,9 @@ public class MainActivity extends AppCompatActivity {
           //  publishProgress(25);
             //Thread.sleep(1000);
            // publishProgress(50);
-            Log.i(TAG, "Num of entries: " +eventArray) ;
+                Log.i(TAG, "Num of entries: " + eventName);
 
-        }
+            }
         catch (Exception e)
         {
 
