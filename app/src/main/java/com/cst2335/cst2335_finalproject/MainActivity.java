@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-         etCity =findViewById(R.id.cityInput);
-         searchR =findViewById(R.id.searchRadius);
-         pgbar = findViewById(R.id.pgbar);
-         cancelBt = findViewById( R.id.cancelBt);
+        etCity = findViewById(R.id.cityInput);
+        searchR = findViewById(R.id.searchRadius);
+        pgbar = findViewById(R.id.pgbar);
+        cancelBt = findViewById(R.id.cancelBt);
 
-         //create a preference file to save the latest input;
+        //create a preference file to save the latest input;
         SharedPreferences prefs = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         etCity.setText(prefs.getString(ACTIVITY_NAME, ""));
 
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
         int version = MyOpener.VERSION;
-        myOpenHelper.onUpgrade(eventDB,version,version+1);
+        myOpenHelper.onUpgrade(eventDB, version, version + 1);
 
         Button searchBt = findViewById(R.id.searchBt);
         searchBt.setOnClickListener((click) ->
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             //get user input to create search URL:
             String cityIn = etCity.getText().toString();
             String RadiusIn = searchR.getText().toString();
-            searchURL =  "https://app.ticketmaster.com/discovery/v2/events.json?apikey="
-                    + COSTUMER_KEY+"&city="+cityIn+"&radius="+RadiusIn ;
+            searchURL = "https://app.ticketmaster.com/discovery/v2/events.json?apikey="
+                    + COSTUMER_KEY + "&city=" + cityIn + "&radius=" + RadiusIn;
 
             //create new AsyncTask to search the events
             MyHTTPRequest searchTask = new MyHTTPRequest();
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
             //go to Profile page
             String searchHst = etCity.getText().toString();
-            goToEvent = new Intent(MainActivity.this ,EventList.class);
+            goToEvent = new Intent(MainActivity.this, EventList.class);
 
             //Save user input data to preference_file
             SharedPreferences.Editor writer = prefs.edit();
@@ -94,81 +95,75 @@ public class MainActivity extends AppCompatActivity {
 
     //create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
     @SuppressLint("StaticFieldLeak")
-    private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String>
-    {
+    private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String> {
         //static private final String TAG = "MyHTTPRequest";
         @Override
-        public String doInBackground(String ... args)
-        {
+        public String doInBackground(String... args) {
             try {
-            //create a URL object of what server to contact:
-            //URL url = new URL(searchURL);
+                //create a URL object of what server to contact:
+                //URL url = new URL(searchURL);
                 URL url = new URL(args[0]);
 
-            //open the connection
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                //open the connection
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-            //wait for data:
-            InputStream response = urlConnection.getInputStream();
+                //wait for data:
+                InputStream response = urlConnection.getInputStream();
 
 
-            //JSON reading:
-            //Build the entire string response:
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
+                //JSON reading:
+                //Build the entire string response:
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
 
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-                sb.append(line).append("\n");
-            }
-            String result = sb.toString(); //result is the whole string
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                String result = sb.toString(); //result is the whole string
 
-            // convert string to JSON: Look at slide 27:
-            JSONObject webResult = new JSONObject(result);
-            JSONArray jSONEventArray = webResult.getJSONObject("_embedded")
-                    .getJSONArray("events");
-               // JSONObject anEvent = jSONEventArray.getJSONObject(0);
+                // convert string to JSON: Look at slide 27:
+                JSONObject webResult = new JSONObject(result);
+                JSONArray jSONEventArray = webResult.getJSONObject("_embedded")
+                        .getJSONArray("events");
+                // JSONObject anEvent = jSONEventArray.getJSONObject(0);
 
-                for (int i=0; i < jSONEventArray.length(); i++){
-                   JSONObject anEvent = jSONEventArray.getJSONObject(i);
+                for (int i = 0; i < jSONEventArray.length(); i++) {
+                    JSONObject anEvent = jSONEventArray.getJSONObject(i);
 
                     // Pulling items from the array to SQLite
-                    String eventName= anEvent.getString("name");
-                    String eventURL= anEvent.getString("url");
+                    String eventName = anEvent.getString("name");
+                    String eventURL = anEvent.getString("url");
 
                     ContentValues newRow = new ContentValues();
-                    newRow.put(MyOpener.COL_EventName,eventName);
-                    newRow.put(MyOpener.COL_URL,eventURL);
-                    long id = eventDB.insert(MyOpener.TABLE_NAME,null,newRow);
-                    }
+                    newRow.put(MyOpener.COL_EventName, eventName);
+                    newRow.put(MyOpener.COL_URL, eventURL);
+                    long id = eventDB.insert(MyOpener.TABLE_NAME, null, newRow);
+                }
 
-          //  publishProgress(25);
-            //Thread.sleep(1000);
-           // publishProgress(50);
+                //  publishProgress(25);
+                //Thread.sleep(1000);
+                // publishProgress(50);
+
+            } catch (Exception ignored) {
 
             }
-        catch (Exception ignored)
-        {
 
+            return "Done";
         }
 
-        return "Done";
-    }
+        //show the progress percentage when searching
+        public void onProgressUpdate(Integer... args) {
+            Log.i(TAG, "In onProgressUpdate");
+            //pgbar.setVisibility(View.VISIBLE);
+        }
 
-    //show the progress percentage when searching
-    public void onProgressUpdate(Integer ... args)
-    {
-        Log.i(TAG, "In onProgressUpdate");
-        //pgbar.setVisibility(View.VISIBLE);
-    }
-    //Type3
-    public void onPostExecute(String fromDoInBackground)
-    {
-        //Make the transition:
-       startActivity(goToEvent);
-       Log.i(TAG, fromDoInBackground);
-    }
+        //Type3
+        public void onPostExecute(String fromDoInBackground) {
+            //Make the transition:
+            startActivity(goToEvent);
+            Log.i(TAG, fromDoInBackground);
+        }
 
     }
 

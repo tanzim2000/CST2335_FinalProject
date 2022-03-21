@@ -3,15 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout-sw720dp/activity_event_list.xml" value="0.1" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_empty.xml" value="0.1" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_event_list.xml" value="0.1" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_main.xml" value="0.3333333333333333" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/event_row.xml" value="0.1" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/fragment_details.xml" value="0.1" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/fragment_details2.xml" value="0.1" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/mainpage.xml" value="0.1796875" />
-        <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/row_of_list.xml" value="0.1" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout-sw720dp/activity_event_list.xml" value="0.190625" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_event_list.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_main.xml" value="0.17314814814814813" />
       </map>
     </option>
   </component>
