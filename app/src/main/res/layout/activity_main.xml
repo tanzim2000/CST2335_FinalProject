@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:text="@string/searchMsg"
 
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="10dp"
 
  />
 
@@ -22,8 +22,8 @@
         android:id="@+id/cityInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
+        android:layout_below="@+id/appAccess"
+        android:layout_marginStart="20dp"
         android:inputType="textPersonName"
         android:hint="@string/searchHint1"
         tools:ignore="TouchTargetSizeCheck" />
@@ -32,14 +32,12 @@
         android:id="@+id/searchRadius"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="140dp"
+        android:layout_below="@+id/cityInput"
+        android:layout_marginStart="20dp"
         android:ems="10"
         android:hint="@string/searchHint2"
         android:inputType="number"
         tools:ignore="TouchTargetSizeCheck" />
-
-
 
     <Button
         android:id="@+id/searchBt"
@@ -47,8 +45,36 @@
         android:layout_height="wrap_content"
         android:text="@string/searchBt"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"/>
+        android:layout_below="@+id/searchRadius"
+        android:layout_marginTop="30dp"/>
 
+    <TextView
+        android:id="@+id/pgMSg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pgMsg"
+        android:layout_below="@+id/searchBt"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="20dp"/>
+
+    <ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pgbar"
+        android:layout_below="@+id/pgMSg"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        style="?android:attr/progressBarStyleHorizontal"/>
+
+
+    <Button
+        android:id="@+id/cancelBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancelBt"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/pgbar"
+        android:layout_marginTop="30dp"/>
 
 
 
