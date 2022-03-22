@@ -19,17 +19,23 @@ import java.util.ArrayList;
 public class EventList extends AppCompatActivity {
     private static final String TAG = "EventList";
 
-    boolean isTablet;
+    private boolean isTablet;
     public ArrayList<Events> eventList = new ArrayList<>(  );
-    MyOpener myOpenHelper;
-    SQLiteDatabase eventDB;
-    MyListAdapter myAdapter;
-    DetailsFragment newFragment;
+    private MyOpener myOpenHelper;
+    private SQLiteDatabase eventDB;
+    private MyListAdapter myAdapter;
+    private DetailsFragment newFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
+
+        if(findViewById(R.id.theFrameView) == null){
+            isTablet=false;
+        } else {
+            isTablet=true;
+        }
 
         //open the database and create a query;
         myOpenHelper = new MyOpener(this);
