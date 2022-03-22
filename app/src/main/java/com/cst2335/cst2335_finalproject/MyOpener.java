@@ -23,10 +23,11 @@ public class MyOpener extends SQLiteOpenHelper {
     @SuppressLint("DefaultLocale")
     @Override
     public void onCreate(SQLiteDatabase db){
-        String theEvent = String.format(" %s %s %s ", "id" , "EventName", "ticketMasterURL" );
+        String theEvent = String.format(" %s %s %s %s %s %s", "id" , "EventName", "StartDate",
+               "MinPrice", "MinPrice", "ticketMasterURL" );
         db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " %s  TEXT, %s TEXT);"
-                , TABLE_NAME, COL_ID, COL_EventName, COL_URL ) );
+                        " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT);"
+                , TABLE_NAME, COL_ID, COL_EventName, COL_StartDate,COL_MIN_Price,COL_MAX_Price, COL_URL ) );
 
     }
 

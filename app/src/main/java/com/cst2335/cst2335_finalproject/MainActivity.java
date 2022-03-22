@@ -136,10 +136,19 @@ public class MainActivity extends AppCompatActivity {
                     // Pulling items from the array to SQLite
                     String eventName= anEvent.getString("name");
                     String eventURL= anEvent.getString("url");
+                    String eventDate=anEvent.getJSONObject("dates").
+                            getJSONObject("start").getString("localDate");
+                    double eventMinP=anEvent.getJSONArray("priceRanges").
+                            getJSONObject(0).getDouble("min");
+                    double eventMaxP=anEvent.getJSONArray("priceRanges").
+                            getJSONObject(0).getDouble("max");
 
                     ContentValues newRow = new ContentValues();
                     newRow.put(MyOpener.COL_EventName,eventName);
                     newRow.put(MyOpener.COL_URL,eventURL);
+                    newRow.put(MyOpener.COL_StartDate,eventDate);
+                    newRow.put(MyOpener.COL_MIN_Price,eventMinP);
+                    newRow.put(MyOpener.COL_MAX_Price,eventMaxP);
                     long id = eventDB.insert(MyOpener.TABLE_NAME,null,newRow);
                     }
 
