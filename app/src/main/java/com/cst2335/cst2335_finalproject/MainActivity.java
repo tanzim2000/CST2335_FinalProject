@@ -142,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
                             getJSONObject(0).getDouble("min");
                     double eventMaxP=anEvent.getJSONArray("priceRanges").
                             getJSONObject(0).getDouble("max");
+                    String imgURL=anEvent.getJSONArray("images")
+                            .getJSONObject(7).getString("url");
 
                     ContentValues newRow = new ContentValues();
                     newRow.put(MyOpener.COL_EventName,eventName);
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     newRow.put(MyOpener.COL_StartDate,eventDate);
                     newRow.put(MyOpener.COL_MIN_Price,eventMinP);
                     newRow.put(MyOpener.COL_MAX_Price,eventMaxP);
+                    newRow.put(MyOpener.COL_IMG,imgURL);
                     long id = eventDB.insert(MyOpener.TABLE_NAME,null,newRow);
                     }
 

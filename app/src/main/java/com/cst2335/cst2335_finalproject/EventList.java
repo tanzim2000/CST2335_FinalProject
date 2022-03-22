@@ -1,6 +1,8 @@
 package com.cst2335.cst2335_finalproject;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -86,11 +88,40 @@ public class EventList extends AppCompatActivity {
             }
 
         });
-    }
 
+        //long click one of the event to delete it from ArrayList and DB
+        myList.setOnItemLongClickListener( (listView, view, pos, id) -> {
+        Events evtChose = eventList.get(pos);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
+        alertDialogBuilder.setTitle("Delete the event")
 
+                //prompt message:
+                .setMessage("Do you want to delete：" + eventList.get(pos).getEventName()+
+                        "\n The selected row is: "+ pos +
+                        "\n The database id is: "+id)
 
+                //what the Yes button does:
+                .setNegativeButton("No", (click1, arg) -> { })
+                .setPositiveButton("Yes", (click2, arg) -> {
+                    eventList.remove(pos);
+                    myAdapter.notifyDataSetChanged();
+
+                    eventDB.delete(MyOpener.TABLE_NAME,MyOpener.COL_ID+
+                            "=?",new String[]{Long.toString(evtChose.getId())});
+
+                //remove the fragment if delete
+                FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().remove(newFragment).commit();
+
+                })
+
+                .create().show();
+        return true;
+    });
+ }
+
+    // create ListAdapter to implement the lise view
     private class MyListAdapter extends BaseAdapter {
         public int getCount() { Log.i(TAG, "total number of even"+eventList.size());
         return eventList.size();

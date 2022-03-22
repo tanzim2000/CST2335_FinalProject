@@ -15,7 +15,7 @@ public class MyOpener extends SQLiteOpenHelper {
     public static final String COL_MIN_Price = "MIN_Price";
     public static final String COL_MAX_Price = "MAX_Price";
     public static final String COL_URL= "URL_to_ticketmaster";
-    //public static final String COL_IMG= ""null"";
+    public static final String COL_IMG= "IMG_url";
 
 
     public MyOpener(Context ctx){super(ctx, FILENAME, null, VERSION);}
@@ -23,11 +23,12 @@ public class MyOpener extends SQLiteOpenHelper {
     @SuppressLint("DefaultLocale")
     @Override
     public void onCreate(SQLiteDatabase db){
-        String theEvent = String.format(" %s %s %s %s %s %s", "id" , "EventName", "StartDate",
-               "MinPrice", "MinPrice", "ticketMasterURL" );
+        String theEvent = String.format(" %s %s %s %s %s %s %s", "id" , "EventName", "StartDate",
+               "MinPrice", "MinPrice", "ticketMasterURL","IMG_url");
         db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT);"
-                , TABLE_NAME, COL_ID, COL_EventName, COL_StartDate,COL_MIN_Price,COL_MAX_Price, COL_URL ) );
+                        " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"
+                , TABLE_NAME, COL_ID, COL_EventName, COL_StartDate,COL_MIN_Price,
+                COL_MAX_Price, COL_URL,COL_IMG ) );
 
     }
 
