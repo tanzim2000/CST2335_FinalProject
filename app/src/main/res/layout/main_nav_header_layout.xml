@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/ticket_shearch_version_1"
+        android:text="@string/ticket_search_version_1"
         android:textSize="15sp" />
 
     <TextView

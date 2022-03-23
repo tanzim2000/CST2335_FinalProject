@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -65,7 +66,7 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
 
         etCity =findViewById(R.id.cityInput);
         searchR =findViewById(R.id.searchRadius);
-        pgbar = findViewById(R.id.pgbar);
+        pgbar = (ProgressBar) findViewById(R.id.pgbar);
         cancelBt = findViewById( R.id.cancelBt);
 
         //create a preference file to save the latest input;
@@ -316,14 +317,23 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
     public void onProgressUpdate(Integer ... args)
     {
         Log.i(TAG, "In onProgressUpdate");
-        //pgbar.setVisibility(View.VISIBLE);
+        pgbar.setVisibility(View.VISIBLE);
     }
     //Type3
+    //for making the progress bar visible, added the "INVISIBLE"part
     public void onPostExecute(String fromDoInBackground)
     {
         //Make the transition:
        startActivity(goToEvent);
        Log.i(TAG, fromDoInBackground);
+        pgbar.setVisibility(View.INVISIBLE);
+//        super.onPostExecute(fromDoInBackground);
+    }
+    //for making the progress bar visible, added the "VISIBLE"part
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        pgbar.setVisibility(View.VISIBLE);
     }
 
     }
