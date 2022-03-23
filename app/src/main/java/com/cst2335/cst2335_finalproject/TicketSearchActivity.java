@@ -330,6 +330,7 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
 //        super.onPostExecute(fromDoInBackground);
     }
     //for making the progress bar visible, added the "VISIBLE"part
+    //source: https://stackoverflow.com/questions/19005014/visibility-of-progressbar
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
