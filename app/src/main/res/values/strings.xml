@@ -6,8 +6,7 @@
     <string name="pgMsg">We are searching the events for you</string>
     <string name="searchBt">Search</string>
     <string name="cancelBt">Cancel </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="snb_undo">UNDO</string>
 
     <string name="mainTicket">TICKET MASTER</string>
     <string name="welcome_to">WELCOME TO CST2335 FINAL PROJECT</string>

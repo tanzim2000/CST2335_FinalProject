@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +17,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 
 public class EventList extends AppCompatActivity {
@@ -23,7 +26,6 @@ public class EventList extends AppCompatActivity {
 
     private boolean isTablet;
     public ArrayList<Events> eventList = new ArrayList<>(  );
-    private MyOpener myOpenHelper;
     private SQLiteDatabase eventDB;
     private MyListAdapter myAdapter;
     private DetailsFragment newFragment;
@@ -33,30 +35,35 @@ public class EventList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
 
-        if(findViewById(R.id.theFrameView) == null){
-            isTablet=false;
-        } else {
-            isTablet=true;
-        }
+        isTablet= findViewById(R.id.theFrameView) != null;
 
         //open the database and create a query;
-        myOpenHelper = new MyOpener(this);
+        MyOpener myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getReadableDatabase();
-        Cursor cursor = eventDB.rawQuery("select * from " +
+        @SuppressLint("Recycle") Cursor cursor = eventDB.rawQuery("select * from " +
                 MyOpener.TABLE_NAME + ";", null);
 
         //Convert column names to indices:
         int eventDBId = cursor.getColumnIndex(MyOpener.COL_ID);
         int eventDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
+        int eventDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
+        int eventDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
+        int eventDBMaxP = cursor.getColumnIndex(MyOpener.COL_MAX_Price);
         int eventDBURL = cursor.getColumnIndex(MyOpener.COL_URL);
+        int imgDBURL = cursor.getColumnIndex(MyOpener.COL_IMG);
 
         //add elements to Arraylist of events
         while (cursor.moveToNext()){
             int id = cursor.getInt(eventDBId);
             String eventName = cursor.getString(eventDBName);
+            String eventDate = cursor.getString(eventDBDate);
+            double eventMinP = cursor.getDouble(eventDBMinP);
+            double eventMaxP = cursor.getDouble(eventDBMaxP);
             String eventURL = cursor.getString(eventDBURL);
+            String imgURL = cursor.getString(imgDBURL);
 
-            eventList.add(new Events(id,eventName,eventURL));
+            eventList.add(new Events(id,eventName,eventDate,eventMinP,
+                    eventMaxP, eventURL, imgURL));
         }
 
         ListView myList = findViewById(R.id.theListView);
@@ -70,8 +77,11 @@ public class EventList extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt("position", pos);
             args.putString("eventName",eventList.get(pos).getEventName());
+            args.putString("eventDate",eventList.get(pos).getStartDate());
+            args.putDouble("eventMinP", eventList.get(pos).getMinPrice());
+            args.putDouble("eventMaxP", eventList.get(pos).getMaxPrice());
             args.putString ("eventUrl", eventList.get(pos).getTicketMasterURL());
-            newFragment.setArguments(args);
+            args.putString ("imgURL", eventList.get(pos).getImgURL());
 
             //create a fragment transaction (if a tablet)
             if (isTablet)  {
@@ -114,9 +124,7 @@ public class EventList extends AppCompatActivity {
                 FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction().remove(newFragment).commit();
 
-                })
-
-                .create().show();
+                }).create().show();
         return true;
     });
  }
@@ -130,7 +138,8 @@ public class EventList extends AppCompatActivity {
         public long getItemId(int id) { return (long) id;}
         public View getView(int position, View old, ViewGroup parent){
             LayoutInflater inflater = getLayoutInflater();
-            View newView= inflater.inflate(R.layout.row_of_list, parent, false);
+            @SuppressLint("ViewHolder") View newView= inflater
+                    .inflate(R.layout.row_of_list, parent, false);
             TextView tView = newView.findViewById(R.id.eventLine);
             tView.setText(getItem(position).toString());
             return newView;

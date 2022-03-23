@@ -6,19 +6,14 @@ public class Events {
 
     long id;
     String eventName;
-    Date startDate;
+    String startDate;
     double minPrice;
     double maxPrice;
     String ticketMasterURL;
+    String imgURL;
 
-    public Events(int id, String eventName, String ticketMasterURL) {
-        this.id=id;
-        this.eventName=eventName;
-        this.ticketMasterURL=ticketMasterURL;
-    }
-
-    public void Evnets(long id, String eventName, Date startDate,
-                       double minPrice, double maxPrice, String ticketMasterURL)
+    public Events(long id, String eventName, String startDate, double minPrice,
+                  double maxPrice, String ticketMasterURL,String imgURL)
     {
         this.id=id;
 
@@ -27,13 +22,14 @@ public class Events {
         this.minPrice=minPrice;
         this.maxPrice=maxPrice;
         this.ticketMasterURL=ticketMasterURL;
-
+        this.imgURL=imgURL;
     }
 
     public long getId(){return id;}
     public String getEventName(){return eventName;}
-    public Date getStartDate(){return startDate;}
+    public String getStartDate(){return startDate;}
     public double getMinPrice(){return minPrice;}
     public double getMaxPrice(){return maxPrice;}
     public String getTicketMasterURL(){return ticketMasterURL;}
+    public String getImgURL(){return imgURL;}
 }
