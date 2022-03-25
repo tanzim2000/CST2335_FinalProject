@@ -85,6 +85,7 @@ public class EventList extends AppCompatActivity {
 
             //create a fragment transaction (if a tablet)
             if (isTablet)  {
+                newFragment.setArguments(args);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setReorderingAllowed(true)

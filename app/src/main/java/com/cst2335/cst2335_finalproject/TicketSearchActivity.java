@@ -14,6 +14,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,13 +31,18 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
-public class TicketSearchActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class TicketSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public final static String PREFERENCES_FILE = "citiesSearched";
     public static final String ACTIVITY_NAME = "MAIN_ACTIVITY";
@@ -61,13 +68,13 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
         setContentView(R.layout.activity_ticket_search);
 
         //add a toolbart
-        Toolbar myToolbar = (Toolbar)findViewById(R.id.ticketToolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.ticketToolbar);
         setSupportActionBar(myToolbar);
 
-        etCity =findViewById(R.id.cityInput);
-        searchR =findViewById(R.id.searchRadius);
+        etCity = findViewById(R.id.cityInput);
+        searchR = findViewById(R.id.searchRadius);
         pgbar = (ProgressBar) findViewById(R.id.pgbar);
-        cancelBt = findViewById( R.id.cancelBt);
+        cancelBt = findViewById(R.id.cancelBt);
 
         //create a preference file to save the latest input;
         SharedPreferences prefs = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
@@ -77,14 +84,13 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
         myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
         int version = MyOpener.VERSION;
-        myOpenHelper.onUpgrade(eventDB,version,version+1);
-
+        myOpenHelper.onUpgrade(eventDB, version, version + 1);
 
 
         //for getting last searched
         sharedPref = getSharedPreferences("Ticket", Context.MODE_PRIVATE);
-        String citySaved = sharedPref.getString("city","");
-        String radiusSaved = sharedPref.getString("radius","");
+        String citySaved = sharedPref.getString("city", "");
+        String radiusSaved = sharedPref.getString("radius", "");
 
         cityEditText = findViewById(R.id.cityInput);
         radiusEditText = findViewById(R.id.searchRadius);
@@ -102,8 +108,8 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
 
             saveSharedPrefs(cityIn, RadiusIn); //save last searched info.
 
-            searchURL =  "https://app.ticketmaster.com/discovery/v2/events.json?apikey="
-                    + COSTUMER_KEY+"&city="+cityIn+"&radius="+RadiusIn ;
+            searchURL = "https://app.ticketmaster.com/discovery/v2/events.json?apikey="
+                    + COSTUMER_KEY + "&city=" + cityIn + "&radius=" + RadiusIn;
 
             //create new AsyncTask to search the events
             MyHTTPRequest searchTask = new MyHTTPRequest();
@@ -111,7 +117,7 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
 
             //go to Profile page
             String searchHst = etCity.getText().toString();
-            goToEvent = new Intent(TicketSearchActivity.this ,EventList.class);
+            goToEvent = new Intent(TicketSearchActivity.this, EventList.class);
 
             //Save user input data to preference_file
             SharedPreferences.Editor writer = prefs.edit();
@@ -162,8 +168,7 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.item0:
 
                 Intent goToHome = new Intent(TicketSearchActivity.this, MainActivity.class);
@@ -176,17 +181,18 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
                 break;
 
             case R.id.item2:
-                String title =  getResources().getString(R.string.help);
+                String title = getResources().getString(R.string.help);
 
                 String line2 = getResources().getString(R.string.help);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle(title)
 
-                        .setMessage( line2 + " \n"
+                        .setMessage(line2 + " \n"
 
                         )
-                        .setNegativeButton("Close", (click, arg) -> { })
+                        .setNegativeButton("Close", (click, arg) -> {
+                        })
 
                         .create().show();
                 break;
@@ -200,8 +206,7 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         String message = null;
 
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.item0:
 
                 Intent goToHome = new Intent(TicketSearchActivity.this, MainActivity.class);
@@ -214,7 +219,7 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
                 break;
 
             case R.id.item2:
-                String title =  getResources().getString(R.string.help);
+                String title = getResources().getString(R.string.help);
                 String line2 = getResources().getString(R.string.help);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -223,7 +228,8 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
                         .setMessage(line2 + " \n"
 
                         )
-                        .setNegativeButton("Close", (click, arg) -> { })
+                        .setNegativeButton("Close", (click, arg) -> {
+                        })
 
 
                         .create().show();
@@ -239,103 +245,123 @@ public class TicketSearchActivity extends AppCompatActivity  implements Navigati
 
     //create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
     @SuppressLint("StaticFieldLeak")
-    private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String>
-    {
+    private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String> {
         //static private final String TAG = "MyHTTPRequest";
         @Override
-        public String doInBackground(String ... args)
-        {
+        public String doInBackground(String... args) {
             try {
-            //create a URL object of what server to contact:
-            //URL url = new URL(searchURL);
+                //create a URL object of what server to contact:
+                //URL url = new URL(searchURL);
                 URL url = new URL(args[0]);
 
-            //open the connection
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                //open the connection
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-            //wait for data:
-            InputStream response = urlConnection.getInputStream();
+                //wait for data:
+                InputStream response = urlConnection.getInputStream();
 
 
-            //JSON reading:
-            //Build the entire string response:
-            BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
+                //JSON reading:
+                //Build the entire string response:
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response, "UTF-8"), 8);
+                StringBuilder sb = new StringBuilder();
 
-            String line;
-            while ((line = reader.readLine()) != null)
-            {
-                sb.append(line).append("\n");
-            }
-            String result = sb.toString(); //result is the whole string
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                String result = sb.toString(); //result is the whole string
 
-            // convert string to JSON: Look at slide 27:
-            JSONObject webResult = new JSONObject(result);
-            JSONArray jSONEventArray = webResult.getJSONObject("_embedded")
-                    .getJSONArray("events");
-               // JSONObject anEvent = jSONEventArray.getJSONObject(0);
+                // convert string to JSON: Look at slide 27:
+                JSONObject webResult = new JSONObject(result);
+                JSONArray jSONEventArray = webResult.getJSONObject("_embedded")
+                        .getJSONArray("events");
+                // JSONObject anEvent = jSONEventArray.getJSONObject(0);
 
-                for (int i=0; i < jSONEventArray.length(); i++){
-                   JSONObject anEvent = jSONEventArray.getJSONObject(i);
+                for (int i = 0; i < jSONEventArray.length(); i++) {
+                    JSONObject anEvent = jSONEventArray.getJSONObject(i);
 
                     // Pulling items from the array to SQLite
-                    String eventName= anEvent.getString("name");
-                    String eventURL= anEvent.getString("url");
-                    String eventDate=anEvent.getJSONObject("dates").
+                    String eventName = anEvent.getString("name");
+                    String eventURL = anEvent.getString("url");
+                    String eventDate = anEvent.getJSONObject("dates").
                             getJSONObject("start").getString("localDate");
-                    double eventMinP=anEvent.getJSONArray("priceRanges").
+                    double eventMinP = anEvent.getJSONArray("priceRanges").
                             getJSONObject(0).getDouble("min");
-                    double eventMaxP=anEvent.getJSONArray("priceRanges").
+                    double eventMaxP = anEvent.getJSONArray("priceRanges").
                             getJSONObject(0).getDouble("max");
-                    String imgURL=anEvent.getJSONArray("images")
+                    String imgURL = anEvent.getJSONArray("images")
                             .getJSONObject(7).getString("url");
 
                     ContentValues newRow = new ContentValues();
-                    newRow.put(MyOpener.COL_EventName,eventName);
-                    newRow.put(MyOpener.COL_URL,eventURL);
-                    newRow.put(MyOpener.COL_StartDate,eventDate);
-                    newRow.put(MyOpener.COL_MIN_Price,eventMinP);
-                    newRow.put(MyOpener.COL_MAX_Price,eventMaxP);
-                    newRow.put(MyOpener.COL_IMG,imgURL);
-                    long id = eventDB.insert(MyOpener.TABLE_NAME,null,newRow);
-                    }
+                    newRow.put(MyOpener.COL_EventName, eventName);
+                    newRow.put(MyOpener.COL_URL, eventURL);
+                    newRow.put(MyOpener.COL_StartDate, eventDate);
+                    newRow.put(MyOpener.COL_MIN_Price, eventMinP);
+                    newRow.put(MyOpener.COL_MAX_Price, eventMaxP);
+                    newRow.put(MyOpener.COL_IMG, downloadImage(imgURL,anEvent.getString("id")));
+                    long id = eventDB.insert(MyOpener.TABLE_NAME, null, newRow);
+                }
 
-          //  publishProgress(25);
-            //Thread.sleep(1000);
-           // publishProgress(50);
+                //  publishProgress(25);
+                //Thread.sleep(1000);
+                // publishProgress(50);
+
+            } catch (Exception ignored) {
 
             }
-        catch (Exception ignored)
-        {
 
+            return "Done";
         }
 
-        return "Done";
-    }
+        private String downloadImage(String imageURL,String id) throws IOException {
 
-    //show the progress percentage when searching
-    public void onProgressUpdate(Integer ... args)
-    {
-        Log.i(TAG, "In onProgressUpdate");
-        pgbar.setVisibility(View.VISIBLE);
-    }
-    //Type3
-    //for making the progress bar visible, added the "INVISIBLE"part
-    public void onPostExecute(String fromDoInBackground)
-    {
-        //Make the transition:
-       startActivity(goToEvent);
-       Log.i(TAG, fromDoInBackground);
-        pgbar.setVisibility(View.INVISIBLE);
+            URL url = new URL(imageURL);
+
+            //open new connection
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            // get image from url
+            Bitmap image = BitmapFactory.decodeStream(urlConnection.getInputStream());
+            String imageFile = id + ".png";
+            if(fileExists(imageFile)){
+                return imageFile;
+            }else {
+                FileOutputStream outputStream = openFileOutput(imageFile, Context.MODE_PRIVATE);
+                image.compress(Bitmap.CompressFormat.PNG, 100,outputStream);
+                outputStream.flush();
+                outputStream.close();
+                return imageFile;
+            }
+        }
+
+        public boolean fileExists(String fname){
+            File file = getBaseContext().getFileStreamPath(fname);
+            return file.exists();
+        }
+
+        //show the progress percentage when searching
+        public void onProgressUpdate(Integer... args) {
+            Log.i(TAG, "In onProgressUpdate");
+            pgbar.setVisibility(View.VISIBLE);
+        }
+
+        //Type3
+        //for making the progress bar visible, added the "INVISIBLE"part
+        public void onPostExecute(String fromDoInBackground) {
+            //Make the transition:
+            startActivity(goToEvent);
+            Log.i(TAG, fromDoInBackground);
+            pgbar.setVisibility(View.INVISIBLE);
 //        super.onPostExecute(fromDoInBackground);
-    }
-    //for making the progress bar visible, added the "VISIBLE"part
-    //source: https://stackoverflow.com/questions/19005014/visibility-of-progressbar
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        pgbar.setVisibility(View.VISIBLE);
-    }
+        }
+
+        //for making the progress bar visible, added the "VISIBLE"part
+        //source: https://stackoverflow.com/questions/19005014/visibility-of-progressbar
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pgbar.setVisibility(View.VISIBLE);
+        }
 
     }
 

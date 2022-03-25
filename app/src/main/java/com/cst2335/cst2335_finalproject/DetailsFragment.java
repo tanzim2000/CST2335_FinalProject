@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -89,14 +90,13 @@ public class DetailsFragment extends Fragment {
         }
 
     public Bitmap getBitmap(String url) {
+
         try {
-            //InputStream is = new java.net.URL(url).openStream();
-            InputStream is = (InputStream) new URL(url).getContent();
-            //is.close();
-            return BitmapFactory.decodeStream(is);
-        } catch (Exception e) {
-            return null;
+            return BitmapFactory.decodeStream(getActivity().openFileInput(url));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
 }
