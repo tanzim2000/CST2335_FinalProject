@@ -291,7 +291,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                     double eventMaxP = anEvent.getJSONArray("priceRanges").
                             getJSONObject(0).getDouble("max");
                     String imgURL = anEvent.getJSONArray("images")
-                            .getJSONObject(7).getString("url");
+                            .getJSONObject(1).getString("url");
 
                     ContentValues newRow = new ContentValues();
                     newRow.put(MyOpener.COL_EventName, eventName);
