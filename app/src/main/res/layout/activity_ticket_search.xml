@@ -29,15 +29,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/searchMsg"
-
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginStart="10dp"      />
 
             <EditText
                 android:id="@+id/cityInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 android:inputType="textPersonName"
                 android:hint="@string/searchHint1"
                 tools:ignore="TouchTargetSizeCheck" />
@@ -46,7 +45,7 @@
                 android:id="@+id/searchRadius"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 android:ems="10"
                 android:hint="@string/searchHint2"
                 android:inputType="number"
@@ -57,15 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/searchBt"
-                android:layout_marginTop="30dp"/>
-
-            <TextView
-                android:id="@+id/pgMSg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/pgMsg"
-                android:layout_marginTop="80dp"
-                android:layout_marginStart="20dp"/>
+                android:layout_marginTop="15dp"/>
 
             <ProgressBar
                 android:layout_width="match_parent"
@@ -76,13 +67,27 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:visibility="invisible" />
 
-
             <Button
                 android:id="@+id/cancelBt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/cancelBt"
-                android:layout_marginTop="30dp"/>
+                android:layout_marginTop="15dp"/>
+
+            <TextView
+                android:id="@+id/pgMSg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pgMsg"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"/>
+
+            <ListView
+                android:id="@+id/FavoriteList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                />
 
         </LinearLayout>
 

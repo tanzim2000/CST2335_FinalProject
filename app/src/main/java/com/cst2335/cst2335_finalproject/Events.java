@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class Events {
 
-    long id;
+    long _id;
+    int isFavorite;
     String eventName;
     String startDate;
     double minPrice;
@@ -12,11 +13,11 @@ public class Events {
     String ticketMasterURL;
     String imgURL;
 
-    public Events(long id, String eventName, String startDate, double minPrice,
+    public Events(long _id, int isFavorite, String eventName, String startDate, double minPrice,
                   double maxPrice, String ticketMasterURL,String imgURL)
     {
-        this.id=id;
-
+        this._id=_id;
+        this.isFavorite=isFavorite;
         this.eventName=eventName;
         this.startDate=startDate;
         this.minPrice=minPrice;
@@ -25,7 +26,8 @@ public class Events {
         this.imgURL=imgURL;
     }
 
-    public long getId(){return id;}
+    public long getId(){return _id;}
+    public int getIsFavorite(){return isFavorite;}
     public String getEventName(){return eventName;}
     public String getStartDate(){return startDate;}
     public double getMinPrice(){return minPrice;}

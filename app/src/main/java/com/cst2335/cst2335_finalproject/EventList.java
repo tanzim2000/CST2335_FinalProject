@@ -39,12 +39,13 @@ public class EventList extends AppCompatActivity {
 
         //open the database and create a query;
         MyOpener myOpenHelper = new MyOpener(this);
-        eventDB = myOpenHelper.getReadableDatabase();
+        eventDB = myOpenHelper.getWritableDatabase();
         @SuppressLint("Recycle") Cursor cursor = eventDB.rawQuery("select * from " +
                 MyOpener.TABLE_NAME + ";", null);
 
         //Convert column names to indices:
         int eventDBId = cursor.getColumnIndex(MyOpener.COL_ID);
+        int eventDBFv = cursor.getColumnIndex(MyOpener.COL_Favorite);
         int eventDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
         int eventDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
         int eventDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
@@ -54,7 +55,8 @@ public class EventList extends AppCompatActivity {
 
         //add elements to Arraylist of events
         while (cursor.moveToNext()){
-            int id = cursor.getInt(eventDBId);
+            long _id = cursor.getLong(eventDBId);
+            int isFavorite = cursor.getInt(eventDBFv);
             String eventName = cursor.getString(eventDBName);
             String eventDate = cursor.getString(eventDBDate);
             double eventMinP = cursor.getDouble(eventDBMinP);
@@ -62,7 +64,7 @@ public class EventList extends AppCompatActivity {
             String eventURL = cursor.getString(eventDBURL);
             String imgURL = cursor.getString(imgDBURL);
 
-            eventList.add(new Events(id,eventName,eventDate,eventMinP,
+            eventList.add(new Events(_id, isFavorite, eventName,eventDate,eventMinP,
                     eventMaxP, eventURL, imgURL));
         }
 
@@ -70,12 +72,13 @@ public class EventList extends AppCompatActivity {
         myList.setAdapter( myAdapter = new MyListAdapter()); //display the ListView to Adapter
 
         //click an item to open a dialog
-        myList.setOnItemClickListener( (listView, view, pos, id) -> {
+        myList.setOnItemClickListener( (listView, view, pos, _id) -> {
 
             //setArguments for the Fragment
             newFragment=new DetailsFragment();
             Bundle args = new Bundle();
-            args.putInt("position", pos);
+            args.putLong("dbId", _id);
+            args.putInt("favorite", eventList.get(pos).getIsFavorite());
             args.putString("eventName",eventList.get(pos).getEventName());
             args.putString("eventDate",eventList.get(pos).getStartDate());
             args.putDouble("eventMinP", eventList.get(pos).getMinPrice());
@@ -101,7 +104,7 @@ public class EventList extends AppCompatActivity {
         });
 
         //long click one of the event to delete it from ArrayList and DB
-        myList.setOnItemLongClickListener( (listView, view, pos, id) -> {
+        myList.setOnItemLongClickListener( (listView, view, pos, _id) -> {
         Events evtChose = eventList.get(pos);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -110,7 +113,7 @@ public class EventList extends AppCompatActivity {
                 //prompt message:
                 .setMessage("Do you want to delete：" + eventList.get(pos).getEventName()+
                         "\n The selected row is: "+ pos +
-                        "\n The database id is: "+id)
+                        "\n The database id is: "+_id)
 
                 //what the Yes button does:
                 .setNegativeButton("No", (click1, arg) -> { })
@@ -136,7 +139,7 @@ public class EventList extends AppCompatActivity {
         return eventList.size();
         }
         public Object getItem(int position) { return eventList.get(position).eventName; }
-        public long getItemId(int id) { return (long) id;}
+        public long getItemId(int position) { return eventList.get(position)._id;}
         public View getView(int position, View old, ViewGroup parent){
             LayoutInflater inflater = getLayoutInflater();
             @SuppressLint("ViewHolder") View newView= inflater

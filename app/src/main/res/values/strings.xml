@@ -3,9 +3,10 @@
     <string name="searchMsg">Input a City Name and Radius to search</string>
     <string name="searchHint1">Input the City Name</string>
     <string name="searchHint2">search radius by KM</string>
-    <string name="pgMsg">We are searching the events for you</string>
+    <string name="pgMsg">The Favorite Event List You Saved</string>
     <string name="searchBt">Search</string>
     <string name="cancelBt">Cancel </string>
+    <string name="favoriteBt">Add to My Favorite </string>
     <string name="snb_undo">UNDO</string>
 
     <string name="mainTicket">TICKET MASTER</string>
