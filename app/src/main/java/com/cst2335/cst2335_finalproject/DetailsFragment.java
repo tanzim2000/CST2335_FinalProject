@@ -1,3 +1,9 @@
+/*
+ * @(#)DetailsFragment.java Mar 27, 2022
+ * Professor: Frank Emanuel
+ * CST82335-012 Project
+ * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
+ */
 package com.cst2335.cst2335_finalproject;
 
 import android.annotation.SuppressLint;
@@ -38,16 +44,19 @@ public class DetailsFragment extends Fragment {
     TextView showDate;
     ImageView showImg;
 
+    // Required empty public constructor
     public DetailsFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //getArguments from Bundle of ChartRoom
-
         assert getArguments() != null;
         position = getArguments().getInt("position", 0);
         eventName = getArguments().getString("eventName", "");
@@ -56,6 +65,14 @@ public class DetailsFragment extends Fragment {
         imgURL = getArguments().getString("imgURL", "");
 
     }
+
+    /**
+     *
+     * @param inflater
+     * @param parent
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup parent,
                              Bundle savedInstanceState) {
@@ -64,6 +81,11 @@ public class DetailsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_details, parent, false);
     }
 
+    /**
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -89,6 +111,11 @@ public class DetailsFragment extends Fragment {
         */
         }
 
+    /**
+     *
+     * @param url
+     * @return
+     */
     public Bitmap getBitmap(String url) {
 
         try {

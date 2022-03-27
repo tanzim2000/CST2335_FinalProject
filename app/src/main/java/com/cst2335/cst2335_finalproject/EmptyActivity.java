@@ -1,9 +1,18 @@
+/*
+ * @(#)DetailsFragment.java Mar 27, 2022
+ * Professor: Frank Emanuel
+ * CST82335-012 Project
+ * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
+ */
 package com.cst2335.cst2335_finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+/**
+ *
+ */
 public class EmptyActivity extends AppCompatActivity {
 
     @Override

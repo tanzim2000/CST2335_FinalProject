@@ -1,3 +1,9 @@
+/*
+ * @(#)DetailsFragment.java Mar 27, 2022
+ * Professor: Frank Emanuel
+ * CST82335-012 Project
+ * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
+ */
 package com.cst2335.cst2335_finalproject;
 
 import androidx.annotation.NonNull;
@@ -243,7 +249,10 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         return true;
     }
 
-    //create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
+    /**
+     * create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
+     *
+     */
     @SuppressLint("StaticFieldLeak")
     private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String> {
         //static private final String TAG = "MyHTTPRequest";
