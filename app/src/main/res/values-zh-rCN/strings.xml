@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">CST2335_finalProject</string>
+    <string name="searchMsg">请输入城市名和搜索半径</string>
+    <string name="searchHint1">请输入城市名</string>
+    <string name="searchHint2">请输入搜索半径（公里）</string>
+    <string name="pgMsg">保存的活动内容</string>
+    <string name="searchBt">搜索</string>
+    <string name="cancelBt">取消 </string>
+    <string name="favoriteBt">保存到我的活动目录里</string>
+    <string name="snb_undo">返回</string>
+
+    <string name="mainTicket">订票系统</string>
+    <string name="welcome_to">欢迎来到 CST2335 FINAL PROJECT</string>
+    <string name="tm_version_1">订票系统版本_1.0</string>
+    <string name="author">Xiaojie Zhao,Jun Fan, Shanshu Hong</string>
+    <string name="home">主页</string>
+    <string name="help">请输入城市名和半径搜索订票信息</string>
+    <string name="ticket_search_version_1">订票系统版本_1</string>
+    <string name="saved_favorites">已保存到我的目录!</string>
+    <string name="how_to_search">搜索方法</string>
+    <string name="save_to_favourite">点击并保存到我的目录!</string>
+    <string name="close">关闭</string>
+</resources>

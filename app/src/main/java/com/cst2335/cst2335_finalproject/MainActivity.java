@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(goToTicket);
                 break;
 
-            case R.id.item2:
-                String title =  getResources().getString(R.string.help);
+            case R.id.help_id:
+                String title =  getResources().getString(R.string.how_to_search);
 
                 String line2 = getResources().getString(R.string.help);
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setMessage( line2 + " \n"
 
                         )
-                        .setNegativeButton("Close", (click, arg) -> { })
+                        .setNegativeButton(R.string.close, (click, arg) -> { })
 
                         .create().show();
                 break;
@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(goToTicket);
                 break;
 
-            case R.id.item2:
-                String title =  getResources().getString(R.string.help);
+            case R.id.help_id:
+                String title =  getResources().getString(R.string.how_to_search);
                 String line2 = getResources().getString(R.string.help);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setMessage(line2 + " \n"
 
                         )
-                        .setNegativeButton("Close", (click, arg) -> { })
+                        .setNegativeButton(R.string.close, (click, arg) -> { })
 
 
                         .create().show();

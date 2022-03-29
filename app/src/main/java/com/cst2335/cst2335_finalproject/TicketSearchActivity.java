@@ -45,12 +45,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TicketSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -154,7 +151,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-    //get favorite event list from database to show favorite list
+        //get favorite event list from database to show favorite list
         //open the database and create a query;
         MyOpener myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
@@ -171,7 +168,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         int imgDBURL = cursor.getColumnIndex(MyOpener.COL_IMG);
 
         //add elements to Arraylist of events
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             int id = cursor.getInt(eventDBId);
             String eventName = cursor.getString(eventDBName);
             String eventDate = cursor.getString(eventDBDate);
@@ -181,9 +178,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             String imgURL = cursor.getString(imgDBURL);
 
             ArrayList<Events> favoriteList = new ArrayList<>();
-            favoriteList.add(new Events(id,eventName,eventDate,eventMinP, eventMaxP, eventURL, imgURL));
+            favoriteList.add(new Events(id, eventName, eventDate, eventMinP, eventMaxP, eventURL, imgURL));
         }
-
 
     }
 
@@ -222,8 +218,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                 startActivity(goToTicket);
                 break;
 
-            case R.id.item2:
-                String title = getResources().getString(R.string.help);
+            case R.id.help_id:
+                String title = getResources().getString(R.string.how_to_search);
 
                 String line2 = getResources().getString(R.string.help);
 
@@ -233,7 +229,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                         .setMessage(line2 + " \n"
 
                         )
-                        .setNegativeButton("Close", (click, arg) -> {
+                        .setNegativeButton(R.string.close, (click, arg) -> {
                         })
 
                         .create().show();
@@ -260,8 +256,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                 startActivity(goToTicket);
                 break;
 
-            case R.id.item2:
-                String title = getResources().getString(R.string.help);
+            case R.id.help_id:
+                String title = getResources().getString(R.string.how_to_search);
                 String line2 = getResources().getString(R.string.help);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -270,7 +266,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                         .setMessage(line2 + " \n"
 
                         )
-                        .setNegativeButton("Close", (click, arg) -> {
+                        .setNegativeButton(R.string.close, (click, arg) -> {
                         })
 
 

@@ -14,6 +14,11 @@
     <string name="tm_version_1">TicketMaster event search_1.0</string>
     <string name="author">Xiaojie Zhao,Jun Fan, Shanshu Hong</string>
     <string name="home">home</string>
-    <string name="help">help</string>
+    <string name="help">To search ticketing information, please enter city name and the radius</string>
     <string name="ticket_search_version_1">Ticket_search_version_1</string>
+    <string name="saved_favorites">Saved to Favourites!</string>
+    <string name="how_to_search">How to search</string>
+    <string name="save_to_favourite">save to favourite</string>
+    <string name="close">Close</string>
+
 </resources>

@@ -15,8 +15,8 @@
         android:orderInCategory="50"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/item2"
-        android:title="@string/help"
+    <item android:id="@+id/help_id"
+        android:title="@string/how_to_search"
         android:icon="@drawable/help"
         android:orderInCategory="100"
         app:showAsAction="never"/>

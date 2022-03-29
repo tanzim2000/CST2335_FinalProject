@@ -85,14 +85,9 @@
             <ListView
                 android:id="@+id/FavoriteList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                />
+                android:layout_height="195dp"
+                android:textSize="15sp" />
 
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/favoritelist"/>
 
 
         </LinearLayout>

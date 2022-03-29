@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -52,7 +53,7 @@ public class DetailsFragment extends Fragment {
 
     /**
      *
-     * @param savedInstanceState
+     * @param savedInstanceState saved Instance
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,11 @@ public class DetailsFragment extends Fragment {
             newRow.put(MyOpener.COL_MAX_Price, event.getMaxPrice());
             newRow.put(MyOpener.COL_IMG, event.getImgURL());
             long id = eventDB.insert(MyOpener.FAVORITE_TABLE_NAME, null, newRow);
+            AlertDialog.Builder builder = new AlertDialog.Builder(DetailsFragment.super.getActivity());
+            AlertDialog dialog = builder.setMessage(R.string.saved_favorites)
+                    .setPositiveButton("OK", (d, w) -> {  /* nothing */})
+                    .create();
+            dialog.show();
         });
 
         showName = view.findViewById(R.id.textView);
