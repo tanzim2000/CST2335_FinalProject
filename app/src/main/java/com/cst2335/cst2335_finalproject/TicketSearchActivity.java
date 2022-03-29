@@ -50,6 +50,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TicketSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -182,6 +183,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             ArrayList<Events> favoriteList = new ArrayList<>();
             favoriteList.add(new Events(id,eventName,eventDate,eventMinP, eventMaxP, eventURL, imgURL));
         }
+
+
     }
 
     //inflat toolbart
