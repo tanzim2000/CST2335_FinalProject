@@ -76,12 +76,7 @@ public class EventList extends AppCompatActivity {
             newFragment=new DetailsFragment();
             Bundle args = new Bundle();
             args.putInt("position", pos);
-            args.putString("eventName",eventList.get(pos).getEventName());
-            args.putString("eventDate",eventList.get(pos).getStartDate());
-            args.putDouble("eventMinP", eventList.get(pos).getMinPrice());
-            args.putDouble("eventMaxP", eventList.get(pos).getMaxPrice());
-            args.putString ("eventUrl", eventList.get(pos).getTicketMasterURL());
-            args.putString ("imgURL", eventList.get(pos).getImgURL());
+            args.putSerializable("event",eventList.get(pos));
 
             //create a fragment transaction (if a tablet)
             if (isTablet)  {

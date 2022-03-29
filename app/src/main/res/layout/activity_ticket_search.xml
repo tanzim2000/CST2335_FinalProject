@@ -84,6 +84,12 @@
                 android:text="@string/cancelBt"
                 android:layout_marginTop="30dp"/>
 
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/favoritelist"/>
+
+
         </LinearLayout>
 
         <!-- THIS IS WHAT IS WHAT POPS OUT FROM THE SIDE:-->

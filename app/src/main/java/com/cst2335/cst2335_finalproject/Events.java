@@ -1,8 +1,9 @@
 package com.cst2335.cst2335_finalproject;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Events {
+public class Events implements Serializable {
 
     long id;
     String eventName;

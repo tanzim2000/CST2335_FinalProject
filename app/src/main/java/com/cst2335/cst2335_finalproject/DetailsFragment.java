@@ -7,6 +7,8 @@
 package com.cst2335.cst2335_finalproject;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -33,16 +35,16 @@ public class DetailsFragment extends Fragment {
 
     //private static String imgURL;
     int position;
-    String eventName;
-    String eventURL;
-    String eventDate;
-    String imgURL;
+    MyOpener myOpenHelper;
+    SQLiteDatabase eventDB;
 
     //Bundle args;
     TextView showName;
     TextView showURL;
     TextView showDate;
     ImageView showImg;
+    private Events event;
+
 
     // Required empty public constructor
     public DetailsFragment() {
@@ -59,11 +61,10 @@ public class DetailsFragment extends Fragment {
         //getArguments from Bundle of ChartRoom
         assert getArguments() != null;
         position = getArguments().getInt("position", 0);
-        eventName = getArguments().getString("eventName", "");
-        eventDate=getArguments().getString("eventDate","");
-        eventURL = getArguments().getString("eventUrl", "");
-        imgURL = getArguments().getString("imgURL", "");
+        event = (Events) getArguments().getSerializable("event");
 
+        myOpenHelper = new MyOpener(getContext());
+        eventDB = myOpenHelper.getWritableDatabase();
     }
 
     /**
@@ -91,17 +92,28 @@ public class DetailsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         //getArgument from CharRoom to Fragment
+        Button button = view.findViewById(R.id.savetofav);
+        button.setOnClickListener(view1 -> {
+            ContentValues newRow = new ContentValues();
+            newRow.put(MyOpener.COL_EventName, event.getEventName());
+            newRow.put(MyOpener.COL_URL, event.getTicketMasterURL());
+            newRow.put(MyOpener.COL_StartDate, event.getStartDate());
+            newRow.put(MyOpener.COL_MIN_Price, event.getMinPrice());
+            newRow.put(MyOpener.COL_MAX_Price, event.getMaxPrice());
+            newRow.put(MyOpener.COL_IMG, event.getImgURL());
+            long id = eventDB.insert(MyOpener.FAVORITE_TABLE_NAME, null, newRow);
+        });
 
         showName = view.findViewById(R.id.textView);
-        showName.setText("Event Name: " + eventName);
+        showName.setText("Event Name: " + event.getEventName());
 
         showImg = view.findViewById(R.id.imageView);
-        showImg.setImageBitmap(getBitmap(imgURL));
+        showImg.setImageBitmap(getBitmap(event.getImgURL()));
 
         showDate = view.findViewById(R.id.textView2);
-        showDate.setText("Event Start Date is: " + eventDate);
+        showDate.setText("Event Start Date is: " + event.getStartDate());
         showURL = view.findViewById(R.id.textView3);
-        showURL.setText("Details Information at: " + imgURL);
+        showURL.setText("Details Information at: " + event.getTicketMasterURL());
 
          /*
         //click Hide button to remove the transaction
