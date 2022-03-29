@@ -6,7 +6,6 @@ import java.util.Date;
 public class Events implements Serializable {
 
     long _id;
-    int isFavorite;
     String eventName;
     String startDate;
     double minPrice;
@@ -14,11 +13,10 @@ public class Events implements Serializable {
     String ticketMasterURL;
     String imgURL;
 
-    public Events(long _id, int isFavorite, String eventName, String startDate, double minPrice,
+    public Events(long _id, String eventName, String startDate, double minPrice,
                   double maxPrice, String ticketMasterURL,String imgURL)
     {
         this._id=_id;
-        this.isFavorite=isFavorite;
         this.eventName=eventName;
         this.startDate=startDate;
         this.minPrice=minPrice;
@@ -27,11 +25,7 @@ public class Events implements Serializable {
         this.imgURL=imgURL;
     }
 
-    public Events(int id, String eventName, String eventDate, double eventMinP, double eventMaxP, String eventURL, String imgURL) {
-    }
-
     public long getId(){return _id;}
-    public int getIsFavorite(){return isFavorite;}
     public String getEventName(){return eventName;}
     public String getStartDate(){return startDate;}
     public double getMinPrice(){return minPrice;}

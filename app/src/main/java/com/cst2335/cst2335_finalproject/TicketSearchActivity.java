@@ -158,11 +158,10 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         MyOpener myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
         @SuppressLint("Recycle") Cursor cursor = eventDB.rawQuery("select * from " +
-                MyOpener.TABLE_NAME + ";", null);
+                MyOpener.FAVORITE_TABLE_NAME + ";", null);
 
         //Convert column names to indices:
         int eventDBId = cursor.getColumnIndex(MyOpener.COL_ID);
-        int eventDBfv = cursor.getColumnIndex(MyOpener.COL_Favorite);
         int eventDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
         int eventDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
         int eventDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
@@ -173,7 +172,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //add elements to Arraylist of events
         while (cursor.moveToNext()){
             int id = cursor.getInt(eventDBId);
-            int isFavorite = cursor.getInt(eventDBfv);
             String eventName = cursor.getString(eventDBName);
             String eventDate = cursor.getString(eventDBDate);
             double eventMinP = cursor.getDouble(eventDBMinP);
@@ -181,10 +179,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             String eventURL = cursor.getString(eventDBURL);
             String imgURL = cursor.getString(imgDBURL);
 
-            ArrayList<Events> FavoriteList = new ArrayList<>(  );
-            if(isFavorite==1){
-            FavoriteList.add(new Events(id,isFavorite,eventName,eventDate,eventMinP,
-                    eventMaxP, eventURL, imgURL));}
+            ArrayList<Events> favoriteList = new ArrayList<>();
+            favoriteList.add(new Events(id,eventName,eventDate,eventMinP, eventMaxP, eventURL, imgURL));
         }
     }
 
