@@ -1,15 +1,19 @@
 package com.cst2335.cst2335_finalproject;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import androidx.fragment.app.Fragment;
 
 public class MyOpener extends SQLiteOpenHelper {
     public static final String FILENAME = "eventInfoDB";
     public static int VERSION = 1;
     public static final String TABLE_NAME = "eventRecord";
     public static final String COL_ID = "_id";
+    public static final String COL_Favorite = "isFavorite";
     public static final String COL_EventName = "EventName";
     public static final String COL_StartDate = "StartDate";
     public static final String COL_MIN_Price = "MIN_Price";
@@ -23,11 +27,14 @@ public class MyOpener extends SQLiteOpenHelper {
     @SuppressLint("DefaultLocale")
     @Override
     public void onCreate(SQLiteDatabase db){
-        String theEvent = String.format(" %s %s %s %s %s %s %s", "id" , "EventName", "StartDate",
-               "MinPrice", "MinPrice", "ticketMasterURL","IMG_url");
+        String theEvent = String.format(" %s %s %s %s %s %s %s %s", "id" , "isFavorite", "EventName",
+                "StartDate", "MinPrice", "MinPrice", "ticketMasterURL","IMG_url");
         db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"
                 , TABLE_NAME, COL_ID, COL_EventName, COL_StartDate, COL_MIN_Price,
+                        "%s  INT,  %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"
+                , TABLE_NAME, COL_ID, COL_Favorite,COL_EventName, COL_StartDate,COL_MIN_Price,
+
                 COL_MAX_Price, COL_URL,COL_IMG ) );
         db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"
