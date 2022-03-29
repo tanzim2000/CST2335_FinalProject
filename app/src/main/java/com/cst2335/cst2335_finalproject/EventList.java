@@ -16,11 +16,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 
+/**
+ * This class is for handle the event_list Page, including the functions:
+ * 1. display the search result saved in SQLite
+ * 2. click on one item to initialize the fragment page for detailed information
+ * 3. long click on one item to delete the record
+ */
 public class EventList extends AppCompatActivity {
     private static final String TAG = "EventList";
 
@@ -125,7 +128,12 @@ public class EventList extends AppCompatActivity {
     });
  }
 
-    // create ListAdapter to implement the lise view
+    /**
+     * create ListAdapter with getCount(), getItem, getItemId, and getView methods
+     * to implement the list view
+     * @atuthor Xiaojie Zhao
+     */
+
     private class MyListAdapter extends BaseAdapter {
         public int getCount() { Log.i(TAG, "total number of even"+eventList.size());
         return eventList.size();

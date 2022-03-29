@@ -69,6 +69,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     ProgressBar pgbar;
     Button cancelBt;
 
+    @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,7 +270,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                         .setNegativeButton(R.string.close, (click, arg) -> {
                         })
 
-
                         .create().show();
 
                 break;
@@ -290,7 +290,13 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //static private final String TAG = "MyHTTPRequest";
         @Override
         public String doInBackground(String... args) {
-            try {
+            publishProgress();
+            try{
+                for (int i= 0; i <= 100; i++) {
+                     Thread.sleep(100);
+                        i++;
+                    publishProgress(); }
+
                 //create a URL object of what server to contact:
                 //URL url = new URL(searchURL);
                 URL url = new URL(args[0]);
@@ -389,10 +395,12 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //Type3
         //for making the progress bar visible, added the "INVISIBLE"part
         public void onPostExecute(String fromDoInBackground) {
-            //Make the transition:
-            startActivity(goToEvent);
+
             Log.i(TAG, fromDoInBackground);
             pgbar.setVisibility(View.INVISIBLE);
+
+            //Make the transition:
+            startActivity(goToEvent);
 //        super.onPostExecute(fromDoInBackground);
         }
 

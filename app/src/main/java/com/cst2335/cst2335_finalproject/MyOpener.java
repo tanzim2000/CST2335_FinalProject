@@ -1,13 +1,13 @@
 package com.cst2335.cst2335_finalproject;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.fragment.app.Fragment;
-
+/**
+ * this class is for create and update a SQLite table
+ */
 public class MyOpener extends SQLiteOpenHelper {
     public static final String FILENAME = "eventInfoDB";
     public static int VERSION = 1;
@@ -23,6 +23,13 @@ public class MyOpener extends SQLiteOpenHelper {
     public static final String FAVORITE_TABLE_NAME = "favoriteRecord";
 
     public MyOpener(Context ctx){super(ctx, FILENAME, null, VERSION);}
+
+    /**
+     * To create a new table in eventInfoDB
+     * @atuthor Xiaojie Zhao
+     * @param db a SQLiteDatabase to be created
+     */
+
 
     @SuppressLint("DefaultLocale")
     @Override
@@ -42,7 +49,12 @@ public class MyOpener extends SQLiteOpenHelper {
 
     }
 
-    // delete current table, create a new one for a new version
+    /**
+     * To update information, delete current table, create a new one for a new version
+     * @atuthor Xiaojie Zhao
+     * @param db the a SQLiteDatabase with old and new version #
+     */
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("Drop table if exists " + TABLE_NAME);

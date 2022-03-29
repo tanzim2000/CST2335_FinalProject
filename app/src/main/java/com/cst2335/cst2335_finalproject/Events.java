@@ -1,8 +1,11 @@
 package com.cst2335.cst2335_finalproject;
 
 import java.io.Serializable;
-import java.util.Date;
 
+/**
+ * This class is for convert information between database and ArrayList
+ * @atuthor Xiaojie Zhao
+ */
 public class Events implements Serializable {
 
     long _id;

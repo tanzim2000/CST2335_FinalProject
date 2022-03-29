@@ -21,4 +21,10 @@
     <string name="save_to_favourite">save to favourite</string>
     <string name="close">Close</string>
 
+    <string name="fragTagName">Event Name: </string>
+    <string name="fragTagPrice">The Range of Ticket Price is from </string>
+    <string name="fragTagDate">Event Start Date is: </string>
+    <string name="fragTagLike">Details Information at: </string>
+
+
 </resources>

@@ -20,4 +20,8 @@
     <string name="how_to_search">搜索方法</string>
     <string name="save_to_favourite">点击并保存到我的目录!</string>
     <string name="close">关闭</string>
+    <string name="fragTagName">活动名称</string>
+    <string name="fragTagPrice">票价范围</string>
+    <string name="fragTagDate">开始时间</string>
+    <string name="fragTagLike">详细信息</string>
 </resources>

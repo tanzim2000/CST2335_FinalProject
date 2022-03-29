@@ -12,21 +12,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
+import java.util.Objects;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +37,7 @@ public class DetailsFragment extends Fragment {
 
     //Bundle args;
     TextView showName;
+    TextView showRange;
     TextView showURL;
     TextView showDate;
     ImageView showImg;
@@ -84,7 +81,6 @@ public class DetailsFragment extends Fragment {
     }
 
     /**
-     *
      * @param view
      * @param savedInstanceState
      */
@@ -111,15 +107,23 @@ public class DetailsFragment extends Fragment {
         });
 
         showName = view.findViewById(R.id.textView);
-        showName.setText("Event Name: " + event.getEventName());
+        showName.setText(getResources().getString(R.string.fragTagName)
+                + event.getEventName());
 
         showImg = view.findViewById(R.id.imageView);
         showImg.setImageBitmap(getBitmap(event.getImgURL()));
 
-        showDate = view.findViewById(R.id.textView2);
-        showDate.setText("Event Start Date is: " + event.getStartDate());
-        showURL = view.findViewById(R.id.textView3);
-        showURL.setText("Details Information at: " + event.getTicketMasterURL());
+        showRange =view.findViewById(R.id.textView2);
+        showRange.setText(getResources().getString(R.string.fragTagPrice) +
+                event.getMinPrice() + " ~ "+event.getMaxPrice());
+
+        showDate = view.findViewById(R.id.textView3);
+        showDate.setText(getResources().getString(R.string.fragTagDate)
+                + event.getStartDate());
+
+        showURL = view.findViewById(R.id.textView4);
+        showURL.setText(getResources().getString(R.string.fragTagLike)
+                + event.getTicketMasterURL());
 
          /*
         //click Hide button to remove the transaction
@@ -132,7 +136,7 @@ public class DetailsFragment extends Fragment {
     /**
      *
      * @param url
-     * @return
+     * @return Bitmap a picture to show
      */
     public Bitmap getBitmap(String url) {
 
