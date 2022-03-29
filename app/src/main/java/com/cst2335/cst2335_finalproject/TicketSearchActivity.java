@@ -19,6 +19,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -44,9 +45,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class TicketSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -149,6 +152,40 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         NavigationView navigationView;
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+    //get favorite event list from database to show favorite list
+        //open the database and create a query;
+        MyOpener myOpenHelper = new MyOpener(this);
+        eventDB = myOpenHelper.getWritableDatabase();
+        @SuppressLint("Recycle") Cursor cursor = eventDB.rawQuery("select * from " +
+                MyOpener.TABLE_NAME + ";", null);
+
+        //Convert column names to indices:
+        int eventDBId = cursor.getColumnIndex(MyOpener.COL_ID);
+        int eventDBfv = cursor.getColumnIndex(MyOpener.COL_Favorite);
+        int eventDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
+        int eventDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
+        int eventDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
+        int eventDBMaxP = cursor.getColumnIndex(MyOpener.COL_MAX_Price);
+        int eventDBURL = cursor.getColumnIndex(MyOpener.COL_URL);
+        int imgDBURL = cursor.getColumnIndex(MyOpener.COL_IMG);
+
+        //add elements to Arraylist of events
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(eventDBId);
+            int isFavorite = cursor.getInt(eventDBfv);
+            String eventName = cursor.getString(eventDBName);
+            String eventDate = cursor.getString(eventDBDate);
+            double eventMinP = cursor.getDouble(eventDBMinP);
+            double eventMaxP = cursor.getDouble(eventDBMaxP);
+            String eventURL = cursor.getString(eventDBURL);
+            String imgURL = cursor.getString(imgDBURL);
+
+            ArrayList<Events> FavoriteList = new ArrayList<>(  );
+            if(isFavorite==1){
+            FavoriteList.add(new Events(id,isFavorite,eventName,eventDate,eventMinP,
+                    eventMaxP, eventURL, imgURL));}
+        }
     }
 
     //inflat toolbart
@@ -300,7 +337,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                     double eventMaxP = anEvent.getJSONArray("priceRanges").
                             getJSONObject(0).getDouble("max");
                     String imgURL = anEvent.getJSONArray("images")
-                            .getJSONObject(7).getString("url");
+                            .getJSONObject(0).getString("url");
 
                     ContentValues newRow = new ContentValues();
                     newRow.put(MyOpener.COL_EventName, eventName);
