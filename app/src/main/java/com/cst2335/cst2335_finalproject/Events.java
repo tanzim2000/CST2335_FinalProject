@@ -27,6 +27,9 @@ public class Events implements Serializable {
         this.imgURL=imgURL;
     }
 
+    public Events(int id, String eventName, String eventDate, double eventMinP, double eventMaxP, String eventURL, String imgURL) {
+    }
+
     public long getId(){return _id;}
     public int getIsFavorite(){return isFavorite;}
     public String getEventName(){return eventName;}
