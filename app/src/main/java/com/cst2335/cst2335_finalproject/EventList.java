@@ -1,3 +1,10 @@
+/*
+ * @(#)EventList.java Mar 27, 2022
+ * Professor: Frank Emanuel
+ * CST2335-012 Project
+ * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
+ */
+
 package com.cst2335.cst2335_finalproject;
 
 import androidx.appcompat.app.AlertDialog;
@@ -133,7 +140,6 @@ public class EventList extends AppCompatActivity {
      * to implement the list view
      * @atuthor Xiaojie Zhao
      */
-
     private class MyListAdapter extends BaseAdapter {
         public int getCount() { Log.i(TAG, "total number of even"+eventList.size());
         return eventList.size();

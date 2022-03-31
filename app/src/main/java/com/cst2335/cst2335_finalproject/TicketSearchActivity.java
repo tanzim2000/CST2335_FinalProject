@@ -1,7 +1,7 @@
 /*
- * @(#)DetailsFragment.java Mar 27, 2022
+ * @(#)TicketSearchActivity.java Mar 27, 2022
  * Professor: Frank Emanuel
- * CST82335-012 Project
+ * CST2335-012 Project
  * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
  */
 package com.cst2335.cst2335_finalproject;
@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -26,15 +27,22 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,26 +57,35 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class TicketSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public final static String PREFERENCES_FILE = "citiesSearched";
     public static final String ACTIVITY_NAME = "MAIN_ACTIVITY";
     public final static String COSTUMER_KEY = "BIxLi1oQL6WVcqfYRvGlHzpUGhFkjE16";
     private static final String TAG = "MainActivity";
-    MyOpener myOpenHelper;
-    SQLiteDatabase eventDB;
-    AsyncTask searchTask;
+    private MyOpener myOpenHelper;
+    private SQLiteDatabase eventDB;
+    private AsyncTask searchTask;
     private EditText cityEditText;
     private EditText radiusEditText;
     private SharedPreferences sharedPref;
+    private ArrayList<Events> favoriteList = new ArrayList<>();
+    private LinearLayout linearLayout;
 
-    Intent goToEvent;
-    String searchURL;
-    EditText etCity;
-    EditText searchR;
-    ProgressBar pgbar;
-    Button cancelBt;
+    private Intent goToEvent;
+    private String searchURL;
+    private EditText etCity;
+    private EditText searchR;
+    private ProgressBar pgbar;
+    private Button cancelBt;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +100,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         searchR = findViewById(R.id.searchRadius);
         pgbar = (ProgressBar) findViewById(R.id.pgbar);
         cancelBt = findViewById(R.id.cancelBt);
+        linearLayout = findViewById(R.id.linearId);
 
         //create a preference file to save the latest input;
         SharedPreferences prefs = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
@@ -91,8 +109,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //open the database save the search result
         myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
-        int version = MyOpener.VERSION;
-        myOpenHelper.onUpgrade(eventDB, version, version + 1);
+         //int version = MyOpener.VERSION;
+         //myOpenHelper.onUpgrade(eventDB, version, version + 1);
 
 
         //for getting last searched
@@ -107,6 +125,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         cityEditText.setText(citySaved);
         radiusEditText.setText(radiusSaved);
 
+        // handle search button
         Button searchBt = findViewById(R.id.searchBt);
         searchBt.setOnClickListener((click) ->
         {
@@ -123,25 +142,15 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             MyHTTPRequest searchTask = new MyHTTPRequest();
             searchTask.execute(searchURL);  //AsyncTask Type 1
 
-            //go to Profile page
-            String searchHst = etCity.getText().toString();
+            //set evenlist intent
             goToEvent = new Intent(TicketSearchActivity.this, EventList.class);
-
-            //Save user input data to preference_file
-            SharedPreferences.Editor writer = prefs.edit();
-            writer.putString(PREFERENCES_FILE, searchHst);
-            writer.apply(); //save to disk
-
-            //Make the transition:
-            //startActivity(goToEvent);
 
         });
 
         //Click cancel button to stop the search progress immediately
         cancelBt.setOnClickListener(view -> searchTask.cancel(true));
 
-
-        //add a navigation view
+        //add a navigation drawer
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 drawer, myToolbar, R.string.help, R.string.app_name);
@@ -151,7 +160,15 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         NavigationView navigationView;
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    /**
+     * populate and handle the favorit list
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        favoriteList.clear();
         //get favorite event list from database to show favorite list
         //open the database and create a query;
         MyOpener myOpenHelper = new MyOpener(this);
@@ -178,13 +195,52 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             String eventURL = cursor.getString(eventDBURL);
             String imgURL = cursor.getString(imgDBURL);
 
-            ArrayList<Events> favoriteList = new ArrayList<>();
             favoriteList.add(new Events(id, eventName, eventDate, eventMinP, eventMaxP, eventURL, imgURL));
+        }
+        ListView myList = findViewById(R.id.FavoriteList);
+        MyListAdapter myAdapter= new MyListAdapter();
+        myList.setAdapter( myAdapter ); //display the ListView to Adapter
+
+        myList.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setPositiveButton("Yes",(click,arg)->{
+                Events eventToDelete =favoriteList.get(i);     //get event will be delete in database
+                myOpenHelper.delete(eventToDelete);   // load the event to delete method to delete
+                favoriteList.remove(i);
+                myAdapter.notifyDataSetChanged();
+                Snackbar snackbar = Snackbar
+                        .make(linearLayout, "Item was deleted", Snackbar.LENGTH_LONG);
+                snackbar.show();
+            })
+                    .setTitle("Delete").setMessage("Want to delete?").setNegativeButton("No",null);
+
+            alertDialogBuilder.create().show();
+            return true;
+        });
+
+    }
+
+    /**
+     * create favorite list event rows information
+     */
+    private class MyListAdapter extends BaseAdapter {
+        public int getCount() { Log.i(TAG, "total number of even"+favoriteList.size());
+            return favoriteList.size();
+        }
+        public Object getItem(int position) { return favoriteList.get(position).eventName; }
+        public long getItemId(int id) { return (long) id;}
+        public View getView(int position, View old, ViewGroup parent){
+            LayoutInflater inflater = getLayoutInflater();
+            @SuppressLint("ViewHolder") View newView= inflater
+                    .inflate(R.layout.row_of_list, parent, false);
+            TextView tView = newView.findViewById(R.id.eventLine);
+            tView.setText(getItem(position).toString());
+            return newView;
         }
 
     }
 
-    //inflat toolbart
+    //inflate toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -203,6 +259,11 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         editor.commit();
     }
 
+    /**
+     * handle toolbar buttons
+     * @param item
+     * @return true
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -240,10 +301,14 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
 
     }
 
+    /**
+     * handle for the navigation drawer buttons
+     * @param item
+     * @return
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        String message = null;
 
         switch (item.getItemId()) {
             case R.id.item0:
@@ -271,19 +336,15 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                         })
 
                         .create().show();
-
                 break;
         }
-
         DrawerLayout drawerLayout = findViewById(R.id.main_drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
-
         return true;
     }
 
     /**
      * create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
-     *
      */
     @SuppressLint("StaticFieldLeak")
     private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String> {
@@ -292,10 +353,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         public String doInBackground(String... args) {
             publishProgress();
             try{
-                for (int i= 0; i <= 100; i++) {
-                     Thread.sleep(100);
-                        i++;
-                    publishProgress(); }
 
                 //create a URL object of what server to contact:
                 //URL url = new URL(searchURL);
@@ -361,6 +418,13 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             return "Done";
         }
 
+        /**
+         *
+         * @param imageURL
+         * @param id
+         * @return
+         * @throws IOException
+         */
         private String downloadImage(String imageURL,String id) throws IOException {
 
             URL url = new URL(imageURL);
@@ -381,6 +445,11 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             }
         }
 
+        /**
+         *
+         * @param fname
+         * @return
+         */
         public boolean fileExists(String fname){
             File file = getBaseContext().getFileStreamPath(fname);
             return file.exists();

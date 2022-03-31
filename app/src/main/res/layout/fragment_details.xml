@@ -61,13 +61,4 @@
         android:text="save to favourite"
         android:layout_below="@+id/textView5" />
 
-
-    <CheckBox
-        android:id="@+id/fvBt"
-        android:text="@string/favoriteBt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
-
 </RelativeLayout>

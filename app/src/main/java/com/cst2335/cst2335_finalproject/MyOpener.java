@@ -1,3 +1,10 @@
+/*
+ * @(#)MyOpener.java Mar 27, 2022
+ * Professor: Frank Emanuel
+ * CST2335-012 Project
+ * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
+ */
+
 package com.cst2335.cst2335_finalproject;
 
 import android.annotation.SuppressLint;
@@ -29,8 +36,6 @@ public class MyOpener extends SQLiteOpenHelper {
      * @atuthor Xiaojie Zhao
      * @param db a SQLiteDatabase to be created
      */
-
-
     @SuppressLint("DefaultLocale")
     @Override
     public void onCreate(SQLiteDatabase db){
@@ -54,7 +59,6 @@ public class MyOpener extends SQLiteOpenHelper {
      * @atuthor Xiaojie Zhao
      * @param db the a SQLiteDatabase with old and new version #
      */
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("Drop table if exists " + TABLE_NAME);
@@ -62,4 +66,9 @@ public class MyOpener extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
+    public int delete(Events events){
+        SQLiteDatabase db = getWritableDatabase();     //getWritableDatabase
+        int del = db.delete(FAVORITE_TABLE_NAME, COL_ID + "=?",new String[]{Long.toString(events.getId())});
+        return del;
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * @(#)DetailsFragment.java Mar 27, 2022
  * Professor: Frank Emanuel
- * CST82335-012 Project
+ * CST2335-012 Project
  * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
  */
 package com.cst2335.cst2335_finalproject;
@@ -25,6 +25,7 @@ import java.util.Objects;
 
 
 /**
+ * the class shows the details of the events
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
@@ -43,13 +44,12 @@ public class DetailsFragment extends Fragment {
     ImageView showImg;
     private Events event;
 
-
     // Required empty public constructor
     public DetailsFragment() {
     }
 
     /**
-     *
+     * Set required variables for the functions
      * @param savedInstanceState saved Instance
      */
     @Override
@@ -66,11 +66,11 @@ public class DetailsFragment extends Fragment {
     }
 
     /**
-     *
+     * sets the layout for fragment
      * @param inflater
      * @param parent
      * @param savedInstanceState
-     * @return
+     * @return detailView
      */
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup parent,
@@ -81,6 +81,7 @@ public class DetailsFragment extends Fragment {
     }
 
     /**
+     * add event data to the fragment layout
      * @param view
      * @param savedInstanceState
      */
@@ -125,16 +126,10 @@ public class DetailsFragment extends Fragment {
         showURL.setText(getResources().getString(R.string.fragTagLike)
                 + event.getTicketMasterURL());
 
-         /*
-        //click Hide button to remove the transaction
-        btnHide = view.findViewById(R.id.hide);
-        FragmentManager fm = getFragmentManager();
-        btnHide.setOnClickListener( click -> fm.beginTransaction().remove(this).commit());
-        */
         }
 
     /**
-     *
+     * open a file path and return a bitmap image
      * @param url
      * @return Bitmap a picture to show
      */
