@@ -19,10 +19,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -286,16 +289,18 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
      *
      */
     @SuppressLint("StaticFieldLeak")
-    private class MyHTTPRequest extends AsyncTask<String, ProgressBar, String> {
+    private class MyHTTPRequest extends AsyncTask<String, Integer, String> {
         //static private final String TAG = "MyHTTPRequest";
         @Override
         public String doInBackground(String... args) {
-            publishProgress();
+//            publishProgress( 25 );
             try{
                 for (int i= 0; i <= 100; i++) {
-                     Thread.sleep(100);
+//                     Thread.sleep(100);
                         i++;
-                    publishProgress(); }
+                    }
+
+                publishProgress(25);
 
                 //create a URL object of what server to contact:
                 //URL url = new URL(searchURL);
@@ -324,6 +329,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                 JSONArray jSONEventArray = webResult.getJSONObject("_embedded")
                         .getJSONArray("events");
                 // JSONObject anEvent = jSONEventArray.getJSONObject(0);
+                publishProgress( 50);
 
                 for (int i = 0; i < jSONEventArray.length(); i++) {
                     JSONObject anEvent = jSONEventArray.getJSONObject(i);
@@ -350,9 +356,9 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                     long id = eventDB.insert(MyOpener.TABLE_NAME, null, newRow);
                 }
 
-                //  publishProgress(25);
-                //Thread.sleep(1000);
-                // publishProgress(50);
+                publishProgress(75);
+
+                publishProgress(100);
 
             } catch (Exception ignored) {
 
@@ -390,6 +396,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         public void onProgressUpdate(Integer... args) {
             Log.i(TAG, "In onProgressUpdate");
             pgbar.setVisibility(View.VISIBLE);
+            pgbar.setProgress(args[0]);
         }
 
         //Type3
@@ -397,11 +404,11 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         public void onPostExecute(String fromDoInBackground) {
 
             Log.i(TAG, fromDoInBackground);
-            pgbar.setVisibility(View.INVISIBLE);
 
             //Make the transition:
             startActivity(goToEvent);
-//        super.onPostExecute(fromDoInBackground);
+            pgbar.setVisibility(View.GONE);
+
         }
 
         //for making the progress bar visible, added the "VISIBLE"part
@@ -410,8 +417,11 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         protected void onPreExecute() {
             super.onPreExecute();
             pgbar.setVisibility(View.VISIBLE);
+            pgbar.getProgressDrawable().setColorFilter(
+                    Color.BLUE, PorterDuff.Mode.MULTIPLY);
         }
 
     }
+
 
 }
