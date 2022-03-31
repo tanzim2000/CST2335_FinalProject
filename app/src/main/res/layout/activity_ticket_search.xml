@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ticketToolbar"
@@ -28,9 +27,9 @@
                 android:id="@+id/appAccess"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/searchMsg"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginStart="10dp"      />
+                android:text="@string/searchMsg" />
 
             <EditText
                 android:id="@+id/cityInput"
@@ -87,7 +86,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="195dp"
                 android:textSize="15sp" />
-
 
 
         </LinearLayout>
