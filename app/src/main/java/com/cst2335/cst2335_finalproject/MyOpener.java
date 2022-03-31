@@ -37,9 +37,8 @@ public class MyOpener extends SQLiteOpenHelper {
         String theEvent = String.format(" %s %s %s %s %s %s %s %s", "id" , "isFavorite", "EventName",
                 "StartDate", "MinPrice", "MinPrice", "ticketMasterURL","IMG_url");
         db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"
-                , TABLE_NAME, COL_ID, COL_EventName, COL_StartDate, COL_MIN_Price,
-
+                        "%s INT,  %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"
+                , TABLE_NAME, COL_ID, COL_Favorite,COL_EventName, COL_StartDate, COL_MIN_Price,
                 COL_MAX_Price, COL_URL,COL_IMG ) );
         db.execSQL( String.format( "Create table %s ( %s INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " %s  TEXT, %s  TEXT, %s REAL, %s REAL, %s TEXT,%s TEXT);"

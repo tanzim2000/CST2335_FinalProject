@@ -48,6 +48,7 @@ public class EventList extends AppCompatActivity {
 
         //Convert column names to indices:
         int eventDBId = cursor.getColumnIndex(MyOpener.COL_ID);
+        int favoriteDB=cursor.getColumnIndex(MyOpener.COL_Favorite);
         int eventDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
         int eventDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
         int eventDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
@@ -58,6 +59,7 @@ public class EventList extends AppCompatActivity {
         //add elements to Arraylist of events
         while (cursor.moveToNext()){
             int id = cursor.getInt(eventDBId);
+            int isFavorite = cursor.getInt(favoriteDB);
             String eventName = cursor.getString(eventDBName);
             String eventDate = cursor.getString(eventDBDate);
             double eventMinP = cursor.getDouble(eventDBMinP);
@@ -65,7 +67,7 @@ public class EventList extends AppCompatActivity {
             String eventURL = cursor.getString(eventDBURL);
             String imgURL = cursor.getString(imgDBURL);
 
-            eventList.add(new Events(id,eventName,eventDate,eventMinP,
+            eventList.add(new Events(id,isFavorite,eventName,eventDate,eventMinP,
                     eventMaxP, eventURL, imgURL));
         }
 

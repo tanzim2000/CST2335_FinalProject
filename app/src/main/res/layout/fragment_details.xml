@@ -17,8 +17,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="150sp"
+        android:layout_width="160sp"
+        android:layout_height="120sp"
         android:layout_below="@+id/textView"
         />
 
@@ -27,14 +27,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 
     <TextView
@@ -43,6 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView3"
         android:layout_marginTop="0dp"
+        android:autoLink="web"
+        android:linksClickable="true"
         android:textSize="15sp" />
 
     <TextView

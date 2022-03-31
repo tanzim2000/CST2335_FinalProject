@@ -107,22 +107,22 @@ public class DetailsFragment extends Fragment {
         });
 
         showName = view.findViewById(R.id.textView);
-        showName.setText(getResources().getString(R.string.fragTagName)
+        showName.setText(getResources().getString(R.string.fragTagName)+" "
                 + event.getEventName());
 
         showImg = view.findViewById(R.id.imageView);
         showImg.setImageBitmap(getBitmap(event.getImgURL()));
 
         showRange =view.findViewById(R.id.textView2);
-        showRange.setText(getResources().getString(R.string.fragTagPrice) +
-                event.getMinPrice() + " ~ "+event.getMaxPrice());
+        showRange.setText(getResources().getString(R.string.fragTagPrice) +" CA$"+
+                event.getMinPrice() + " ~ CA$"+event.getMaxPrice());
 
         showDate = view.findViewById(R.id.textView3);
-        showDate.setText(getResources().getString(R.string.fragTagDate)
+        showDate.setText(getResources().getString(R.string.fragTagDate) +" "
                 + event.getStartDate());
 
         showURL = view.findViewById(R.id.textView4);
-        showURL.setText(getResources().getString(R.string.fragTagLike)
+        showURL.setText(getResources().getString(R.string.fragTagLike)+" "
                 + event.getTicketMasterURL());
 
          /*
