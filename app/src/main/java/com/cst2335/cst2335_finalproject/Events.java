@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class Events implements Serializable {
 
     long _id;
+    int isFavorite;
     String eventName;
     String startDate;
     double minPrice;
@@ -27,6 +28,7 @@ public class Events implements Serializable {
                   double maxPrice, String ticketMasterURL,String imgURL)
     {
         this._id=_id;
+        this.isFavorite=isFavorite;
         this.eventName=eventName;
         this.startDate=startDate;
         this.minPrice=minPrice;
@@ -34,8 +36,15 @@ public class Events implements Serializable {
         this.ticketMasterURL=ticketMasterURL;
         this.imgURL=imgURL;
     }
+    public Events(long _id, int isFavorite,String eventName, String startDate, double minPrice,
+                  double maxPrice, String ticketMasterURL,String imgURL)
+    {   this(_id, eventName, startDate, minPrice,maxPrice, ticketMasterURL,imgURL);
+        this.isFavorite=isFavorite;
+
+    }
 
     public long getId(){return _id;}
+    public int getIsFavorite(){return isFavorite;}
     public String getEventName(){return eventName;}
     public String getStartDate(){return startDate;}
     public double getMinPrice(){return minPrice;}
