@@ -1,3 +1,10 @@
+/*
+ * @(#)MainActivity.java Mar 27, 2022
+ * Professor: Frank Emanuel
+ * CST2335-012 Project
+ * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
+ */
+
 package com.cst2335.cst2335_finalproject;
 
 import androidx.annotation.NonNull;

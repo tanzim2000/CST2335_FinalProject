@@ -71,6 +71,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     private static final String TAG = "MainActivity";
     private MyOpener myOpenHelper;
     private SQLiteDatabase eventDB;
+    private SQLiteDatabase favoriteDB;
     private AsyncTask searchTask;
     private EditText cityEditText;
     private EditText radiusEditText;
@@ -113,8 +114,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //open the database save the search result
         myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
-         //int version = MyOpener.VERSION;
-         //myOpenHelper.onUpgrade(eventDB, version, version + 1);
+         int version = MyOpener.VERSION;
+         myOpenHelper.onUpgrade(eventDB, version, version + 1);
 
 
         //for getting last searched
@@ -174,28 +175,29 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         favoriteList.clear();
         //get favorite event list from database to show favorite list
         //open the database and create a query;
-        MyOpener myOpenHelper = new MyOpener(this);
-        eventDB = myOpenHelper.getWritableDatabase();
-        @SuppressLint("Recycle") Cursor cursor = eventDB.rawQuery("select * from " +
+        MyOpener myFavoriteOpener = new MyOpener(this);
+        favoriteDB = myFavoriteOpener.getWritableDatabase();
+
+        @SuppressLint("Recycle") Cursor cursor = favoriteDB.rawQuery("select * from " +
                 MyOpener.FAVORITE_TABLE_NAME + ";", null);
 
         //Convert column names to indices:
-        int eventDBId = cursor.getColumnIndex(MyOpener.COL_ID);
-        int eventDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
-        int eventDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
-        int eventDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
-        int eventDBMaxP = cursor.getColumnIndex(MyOpener.COL_MAX_Price);
-        int eventDBURL = cursor.getColumnIndex(MyOpener.COL_URL);
+        int favoriteDBId = cursor.getColumnIndex(MyOpener.COL_ID);
+        int favoriteDBName = cursor.getColumnIndex(MyOpener.COL_EventName);
+        int favoriteDBDate = cursor.getColumnIndex(MyOpener.COL_StartDate);
+        int favoriteDBMinP = cursor.getColumnIndex(MyOpener.COL_MIN_Price);
+        int favoriteDBMaxP = cursor.getColumnIndex(MyOpener.COL_MAX_Price);
+        int favoriteDBURL = cursor.getColumnIndex(MyOpener.COL_URL);
         int imgDBURL = cursor.getColumnIndex(MyOpener.COL_IMG);
 
         //add elements to Arraylist of events
         while (cursor.moveToNext()) {
-            int id = cursor.getInt(eventDBId);
-            String eventName = cursor.getString(eventDBName);
-            String eventDate = cursor.getString(eventDBDate);
-            double eventMinP = cursor.getDouble(eventDBMinP);
-            double eventMaxP = cursor.getDouble(eventDBMaxP);
-            String eventURL = cursor.getString(eventDBURL);
+            int id = cursor.getInt(favoriteDBId);
+            String eventName = cursor.getString(favoriteDBName);
+            String eventDate = cursor.getString(favoriteDBDate);
+            double eventMinP = cursor.getDouble(favoriteDBMinP);
+            double eventMaxP = cursor.getDouble(favoriteDBMaxP);
+            String eventURL = cursor.getString(favoriteDBURL);
             String imgURL = cursor.getString(imgDBURL);
 
             favoriteList.add(new Events(id, eventName, eventDate, eventMinP, eventMaxP, eventURL, imgURL));
