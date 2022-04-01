@@ -25,8 +25,16 @@ import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
+/**
+ * Ticket Master main class with user tool bar, navigation bar, buttons
+ * inheritance AppCompatActivity, and implements NavigationView.OnNavigationItemSelectedListener
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    /**
+     * Create bundle type saved instanceState
+     * @param savedInstanceState  saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +42,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Button loginTicketBtn = findViewById(R.id.buttonTicket);
         loginTicketBtn.setOnClickListener(bt -> {
-
             Intent goToTicket = new Intent(MainActivity.this, TicketSearchActivity.class);
             startActivity(goToTicket);
-
         });
 
         //add a toolbart
@@ -57,17 +63,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    //inflat toolbar
+    /**
+     * handle for the navigation drawer buttons
+     * @param menu menu created
+     * @return true true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_toolbar_menu, menu);
-
         return true;
     }
 
-
+    /**
+     * handle toolbar buttons
+     * @param item each icon
+     * @return true true
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -80,24 +93,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.help_id:
                 String title =  getResources().getString(R.string.how_to_search);
-
                 String line2 = getResources().getString(R.string.help);
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(title)
-
-                        .setMessage( line2 + " \n"
-
-                        )
-                        .setNegativeButton(R.string.close, (click, arg) -> { })
-
-                        .create().show();
+                alertDialogBuilder.setTitle(title).setMessage( line2 + " \n").setNegativeButton(R.string.close, (click, arg) -> { })
+                    .create().show();
                 break;
         }
         return true;
-
     }
 
+    /**
+     * handle for the navigation drawer buttons
+     * @param item icons
+     * @return true true
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -115,23 +124,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String line2 = getResources().getString(R.string.help);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(title)
-
-                        .setMessage(line2 + " \n"
-
-                        )
-                        .setNegativeButton(R.string.close, (click, arg) -> { })
-
-
-                        .create().show();
-
+                alertDialogBuilder.setTitle(title).setMessage(line2 + " \n")
+                   .setNegativeButton(R.string.close, (click, arg) -> { })
+                .create().show();
                 break;
         }
-
         DrawerLayout drawerLayout = findViewById(R.id.main_drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
-
         return true;
     }
-
 }

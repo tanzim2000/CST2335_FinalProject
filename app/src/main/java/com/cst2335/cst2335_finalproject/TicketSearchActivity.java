@@ -1,7 +1,7 @@
 /*
  * @(#)DetailsFragment.java Mar 27, 2022
  * Professor: Frank Emanuel
- * CST82335-012 Project
+ * CST2335-012 Project
  * Students: Xiaojie Zhao, Shanshu Hong, Jun Fan
  */
 package com.cst2335.cst2335_finalproject;
@@ -61,7 +61,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- *
+ * Ticket Search class with user entered data, tool bar, navigation bar, and also favorite event that user saved.
+ * inheritance AppCompatActivity, and implements NavigationView.OnNavigationItemSelectedListener
  */
 public class TicketSearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -88,8 +89,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     MyListAdapter myAdapter= new MyListAdapter();
 
     /**
-     *
-     * @param savedInstanceState
+     * Create bundle type saved instanceState
+     * @param savedInstanceState saved instance
      */
     @SuppressLint("CutPasteId")
     @Override
@@ -167,7 +168,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     }
 
     /**
-     * populate and handle the favorit list
+     * populate and handle the favorite list on the bottom of the main screen
      */
     @Override
     protected void onResume() {
@@ -213,20 +214,18 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                 myOpenHelper.delete(eventToDelete);   // load the event to delete method to delete
                 favoriteList.remove(i);
                 myAdapter.notifyDataSetChanged();
-                Snackbar snackbar = Snackbar
-                        .make(linearLayout, "Item was deleted", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(linearLayout, "Item was deleted", Snackbar.LENGTH_LONG);
                 snackbar.show();
             })
-                    .setTitle("Delete").setMessage("Want to delete?").setNegativeButton("No",null);
-
+            .setTitle("Delete").setMessage("Want to delete?").setNegativeButton("No",null);
             alertDialogBuilder.create().show();
             return true;
         });
-
     }
 
     /**
-     * create favorite list event rows information
+     * create list Adapter class, inheritance BaseAdapter to retrieving favorite data to
+     *      create favorite list event view - event information
      */
     private class MyListAdapter extends BaseAdapter {
         public int getCount() { Log.i(TAG, "total number of even"+favoriteList.size());
@@ -242,21 +241,26 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             tView.setText(getItem(position).toString());
             return newView;
         }
-
     }
 
-    //inflate toolbar
+    /**
+     * Inflate toolbar
+     * @param menu menu created
+     * @return true true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_toolbar_menu, menu);
-
         return true;
     }
 
-
-    //for saving the last searched information
+    /**
+     * for saving the last searched information
+     * @param city saved city
+     * @param radius saved radius
+     */
     private void saveSharedPrefs(String city, String radius) {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("city", city);
@@ -266,8 +270,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
 
     /**
      * handle toolbar buttons
-     * @param item
-     * @return true
+     * @param item each icon
+     * @return true true
      */
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -287,29 +291,21 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
 
             case R.id.help_id:
                 String title = getResources().getString(R.string.how_to_search);
-
                 String line2 = getResources().getString(R.string.help);
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-                alertDialogBuilder.setTitle(title)
-
-                        .setMessage(line2 + " \n"
-
-                        )
-                        .setNegativeButton(R.string.close, (click, arg) -> {
-                        })
-
-                        .create().show();
+                alertDialogBuilder.setTitle(title).setMessage(line2 + " \n")
+                     .setNegativeButton(R.string.close, (click, arg) -> {
+                     })
+                     .create().show();
                 break;
         }
         return true;
-
     }
 
     /**
      * handle for the navigation drawer buttons
-     * @param item
-     * @return
+     * @param item icons
+     * @return true true
      */
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -317,7 +313,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
 
         switch (item.getItemId()) {
             case R.id.item0:
-
                 Intent goToHome = new Intent(TicketSearchActivity.this, MainActivity.class);
                 startActivity(goToHome);
                 break;
@@ -330,17 +325,11 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             case R.id.help_id:
                 String title = getResources().getString(R.string.how_to_search);
                 String line2 = getResources().getString(R.string.help);
-
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 alertDialogBuilder.setTitle(title)
-
-                        .setMessage(line2 + " \n"
-
-                        )
-                        .setNegativeButton(R.string.close, (click, arg) -> {
-                        })
-
-                        .create().show();
+                     .setMessage(line2 + " \n").setNegativeButton(R.string.close, (click, arg) -> {
+                     })
+                     .create().show();
                 break;
         }
         DrawerLayout drawerLayout = findViewById(R.id.main_drawer_layout);
@@ -349,7 +338,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     }
 
     /**
-     * create MyHTTPRequest class to get information from https://www.ticketmaster.ca/
+     * create MyHTTPRequest class, extends AsyncTask to retrieve data from https://www.ticketmaster.ca/
+     * apply publishProgress to show the progress status in progress bar
      */
     @SuppressLint("StaticFieldLeak")
     private class MyHTTPRequest extends AsyncTask<String, Integer, String> {
@@ -357,12 +347,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         @Override
         public String doInBackground(String... args) {
             try{
-//                for (int i= 0; i <= 100; i++) {
-//                     Thread.sleep(100);
-//                        i++;
-//                    }
                 publishProgress(25);
-
                 //create a URL object of what server to contact:
                 //URL url = new URL(searchURL);
                 URL url = new URL(args[0]);
@@ -372,7 +357,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
 
                 //wait for data:
                 InputStream response = urlConnection.getInputStream();
-
 
                 //JSON reading:
                 //Build the entire string response:
@@ -418,24 +402,20 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                     newRow.put(MyOpener.COL_IMG, downloadImage(imgURL,anEvent.getString("id")));
                     long id = eventDB.insert(MyOpener.TABLE_NAME, null, newRow);
                 }
-
                 publishProgress(75);
-
                 publishProgress(100);
-
             } catch (Exception ignored) {
-
             }
 
             return "Done";
         }
 
         /**
-         *
-         * @param imageURL
-         * @param id
-         * @return
-         * @throws IOException
+         * Retrieve image data from URL
+         * @param imageURL imageURL address
+         * @param id imageID
+         * @return imageFile imagefile show in the fragment
+         * @throws IOException exception
          */
         private String downloadImage(String imageURL,String id) throws IOException {
 
@@ -458,37 +438,40 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         }
 
         /**
-         *
-         * @param fname
-         * @return
+         * check if the file exists when retrieving file from the URL
+         * @param fname filename
+         * @return boolean if exists or not
          */
         public boolean fileExists(String fname){
             File file = getBaseContext().getFileStreamPath(fname);
             return file.exists();
         }
 
-        //show the progress percentage when searching
+        /**
+         *  create progress status bar with initial args 0
+         * @param args progress bar status
+         */
         public void onProgressUpdate(Integer... args) {
             Log.i(TAG, "In onProgressUpdate");
             pgbar.setVisibility(View.VISIBLE);
             pgbar.setProgress(args[0]);
         }
 
-        //Type3
-        //for making the progress bar visible, added the "INVISIBLE"part
+        /**
+         * after execute, progress bar should be the INVISIBLE, with GONE value
+         * @param fromDoInBackground from do in ack ground
+         */
         public void onPostExecute(String fromDoInBackground) {
-
             Log.i(TAG, fromDoInBackground);
-
             //Make the transition:
             startActivity(goToEvent);
             pgbar.setVisibility(View.GONE);
-
-
         }
 
-        //for making the progress bar visible, added the "VISIBLE"part
-        //source: https://stackoverflow.com/questions/19005014/visibility-of-progressbar
+        /**
+         * for making the progress bar visible, added the "VISIBLE"part
+         * source: https://stackoverflow.com/questions/19005014/visibility-of-progressbar
+         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -496,8 +479,5 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             pgbar.getProgressDrawable().setColorFilter(
                     Color.BLUE, PorterDuff.Mode.MULTIPLY);
         }
-
     }
-
-
 }
