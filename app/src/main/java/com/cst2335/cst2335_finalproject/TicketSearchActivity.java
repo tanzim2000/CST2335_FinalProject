@@ -84,6 +84,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     private EditText searchR;
     private ProgressBar pgbar;
     private Button cancelBt;
+    MyListAdapter myAdapter= new MyListAdapter();
 
     /**
      *
@@ -147,7 +148,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
 
             //set evenlist intent
             goToEvent = new Intent(TicketSearchActivity.this, EventList.class);
-
         });
 
         //Click cancel button to stop the search progress immediately
@@ -355,11 +355,10 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         @Override
         public String doInBackground(String... args) {
             try{
-                for (int i= 0; i <= 100; i++) {
+//                for (int i= 0; i <= 100; i++) {
 //                     Thread.sleep(100);
-                        i++;
-                    }
-
+//                        i++;
+//                    }
                 publishProgress(25);
 
                 //create a URL object of what server to contact:
@@ -390,6 +389,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                         .getJSONArray("events");
                 // JSONObject anEvent = jSONEventArray.getJSONObject(0);
                 publishProgress( 50);
+
+                eventDB.execSQL("delete from "+ MyOpener.TABLE_NAME);
 
                 for (int i = 0; i < jSONEventArray.length(); i++) {
                     JSONObject anEvent = jSONEventArray.getJSONObject(i);
@@ -480,6 +481,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             //Make the transition:
             startActivity(goToEvent);
             pgbar.setVisibility(View.GONE);
+
 
         }
 
