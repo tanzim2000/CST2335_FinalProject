@@ -113,7 +113,7 @@ public class EventList extends AppCompatActivity {
         alertDialogBuilder.setTitle("Delete the event")
 
                 //prompt message:
-                .setMessage("Do you want to delete：" + eventList.get(pos).getEventName()+
+                .setMessage("Want to delete: " + eventList.get(pos).getEventName()+
                         "\n The selected row is: "+ pos +
                         "\n The database id is: "+id)
 

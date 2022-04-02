@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/savetofav"
-        android:text="save to favourite"
+        android:text="@string/save_to_favourite"
         android:layout_below="@+id/textView5" />
 
 </RelativeLayout>

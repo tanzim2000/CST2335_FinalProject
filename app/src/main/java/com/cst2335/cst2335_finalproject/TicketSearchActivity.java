@@ -214,10 +214,10 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
                 myOpenHelper.delete(eventToDelete);   // load the event to delete method to delete
                 favoriteList.remove(i);
                 myAdapter.notifyDataSetChanged();
-                Snackbar snackbar = Snackbar.make(linearLayout, "Item was deleted", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(linearLayout, getResources().getString(R.string.deleted_favorite), Snackbar.LENGTH_LONG);
                 snackbar.show();
             })
-            .setTitle("Delete").setMessage("Want to delete?").setNegativeButton("No",null);
+            .setTitle("Delete").setMessage(getResources().getString(R.string.want_delete)).setNegativeButton("No",null);
             alertDialogBuilder.create().show();
             return true;
         });

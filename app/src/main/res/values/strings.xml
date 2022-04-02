@@ -16,15 +16,16 @@
     <string name="home">home</string>
     <string name="help">To search ticketing information, please enter city name and the radius</string>
     <string name="ticket_search_version_1">Ticket_search_version_1</string>
-    <string name="saved_favorites">Saved to Favourites!</string>
+    <string name="saved_favorites">Saved to Favourites?</string>
     <string name="how_to_search">How to search</string>
     <string name="save_to_favourite">save to favourite</string>
     <string name="close">Close</string>
+    <string name="deleted_favorite">Item was deleted</string>
+    <string name="want_delete">Want to delete?</string>
 
     <string name="fragTagName">Event Name:  </string>
     <string name="fragTagPrice">The Price of Ticket is from  </string>
     <string name="fragTagDate">Event Start Date is:  </string>
     <string name="fragTagLike">Details Information at:  </string>
-
 
 </resources>

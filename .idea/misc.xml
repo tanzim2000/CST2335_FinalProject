@@ -4,10 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout-sw720dp/activity_event_list.xml" value="0.190625" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_empty.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_event_list.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_main.xml" value="0.17314814814814813" />
-        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_ticket_search.xml" value="0.1" />
-        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/fragment_details.xml" value="0.1" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/activity_ticket_search.xml" value="0.4" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/fragment_details.xml" value="0.4" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/main_nav_header_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout/row_of_list.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Roger/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/menu/main_toolbar_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38333333333333336" />
         <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout-land/activity_event_list.xml" value="0.2734375" />
         <entry key="..\:/Users/truby/AndroidStudioProjects/CST2335_finalProject/app/src/main/res/layout-sw720dp/activity_event_list.xml" value="0.1" />
