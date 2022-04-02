@@ -72,10 +72,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     private static final String TAG = "MainActivity";
     private MyOpener myOpenHelper;
     private SQLiteDatabase eventDB;
-    private SQLiteDatabase favoriteDB;
     private AsyncTask searchTask;
-    private EditText cityEditText;
-    private EditText radiusEditText;
     private SharedPreferences sharedPref;
     private ArrayList<Events> favoriteList = new ArrayList<>();
     private LinearLayout linearLayout;
@@ -85,7 +82,6 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
     private EditText etCity;
     private EditText searchR;
     private ProgressBar pgbar;
-    private Button cancelBt;
     MyListAdapter myAdapter= new MyListAdapter();
 
     /**
@@ -105,7 +101,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         etCity = findViewById(R.id.cityInput);
         searchR = findViewById(R.id.searchRadius);
         pgbar = (ProgressBar) findViewById(R.id.pgbar);
-        cancelBt = findViewById(R.id.cancelBt);
+        Button cancelBt = findViewById(R.id.cancelBt);
         linearLayout = findViewById(R.id.linearId);
 
         //create a preference file to save the latest input;
@@ -124,8 +120,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         String citySaved = sharedPref.getString("city", "");
         String radiusSaved = sharedPref.getString("radius", "");
 
-        cityEditText = findViewById(R.id.cityInput);
-        radiusEditText = findViewById(R.id.searchRadius);
+        EditText cityEditText = findViewById(R.id.cityInput);
+        EditText radiusEditText = findViewById(R.id.searchRadius);
 
         // set saved city and radius
         cityEditText.setText(citySaved);
@@ -148,7 +144,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
             MyHTTPRequest searchTask = new MyHTTPRequest();
             searchTask.execute(searchURL);  //AsyncTask Type 1
 
-            //set evenlist intent
+            //set eventList intent
             goToEvent = new Intent(TicketSearchActivity.this, EventList.class);
         });
 
@@ -158,7 +154,8 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //add a navigation drawer
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                drawer, myToolbar, R.string.help, R.string.app_name);
+                drawer, myToolbar, R.string.help,
+                        R.string.app_name);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -177,7 +174,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //get favorite event list from database to show favorite list
         //open the database and create a query;
         MyOpener myFavoriteOpener = new MyOpener(this);
-        favoriteDB = myFavoriteOpener.getWritableDatabase();
+        SQLiteDatabase favoriteDB = myFavoriteOpener.getWritableDatabase();
 
         @SuppressLint("Recycle") Cursor cursor = favoriteDB.rawQuery("select * from " +
                 MyOpener.FAVORITE_TABLE_NAME + ";", null);
