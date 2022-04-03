@@ -70,4 +70,10 @@ public class MyOpener extends SQLiteOpenHelper {
         int del = db.delete(FAVORITE_TABLE_NAME, COL_ID + "=?",new String[]{Long.toString(events.getId())});
         return del;
     }
+
+    //empty the desired table
+    public void truncateTable(String tableName){
+        SQLiteDatabase db = getWritableDatabase();     //getWritableDatabase
+        db.execSQL("delete from " + tableName);
+    }
 }

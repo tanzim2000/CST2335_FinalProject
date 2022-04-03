@@ -111,8 +111,7 @@ public class TicketSearchActivity extends AppCompatActivity implements Navigatio
         //open the database save the search result
         myOpenHelper = new MyOpener(this);
         eventDB = myOpenHelper.getWritableDatabase();
-         int version = MyOpener.VERSION;
-         myOpenHelper.onUpgrade(eventDB, version, version + 1);
+        myOpenHelper.truncateTable(MyOpener.TABLE_NAME);
 
 
         //for getting last searched
