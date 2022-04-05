@@ -7,22 +7,34 @@
 
 package com.cst2335.cst2335_finalproject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
 
 /**
@@ -31,7 +43,7 @@ import java.util.ArrayList;
  * 2. click on one item to initialize the fragment page for detailed information
  * 3. long click on one item to delete the record
  */
-public class EventList extends AppCompatActivity {
+public class EventList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final String TAG = "EventList";
 
     private boolean isTablet;
@@ -40,10 +52,15 @@ public class EventList extends AppCompatActivity {
     private MyListAdapter myAdapter;
     private DetailsFragment newFragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
+
+        //add a toolbart
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.ticketToolbar);
+        setSupportActionBar(myToolbar);
 
         isTablet= findViewById(R.id.theFrameView) != null;
 
@@ -131,9 +148,102 @@ public class EventList extends AppCompatActivity {
                 fm.beginTransaction().remove(newFragment).commit();
 
                 }).create().show();
+                return true;
+        });
+        //add a navigation drawer
+        DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawer, myToolbar, R.string.help,
+                R.string.app_name);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView;
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    /**
+     * Inflate toolbar
+     * @param menu menu created
+     * @return true true
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_toolbar_menu, menu);
         return true;
-    });
- }
+    }
+
+    /**
+     * handle toolbar buttons
+     * @param item each icon
+     * @return true true
+     */
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.item0:
+
+                Intent goToHome = new Intent(EventList.this, MainActivity.class);
+                startActivity(goToHome);
+                break;
+
+            case R.id.item1:
+                Intent goToTicket = new Intent(EventList.this, TicketSearchActivity.class);
+                startActivity(goToTicket);
+                break;
+
+            case R.id.help_id:
+                String title = getResources().getString(R.string.how_to_search);
+                String line2 = getResources().getString(R.string.help);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(title).setMessage(line2 + " \n")
+                        .setNegativeButton(R.string.close, (click, arg) -> {
+                        })
+                        .create().show();
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * handle for the navigation drawer buttons
+     * @param item icons
+     * @return true true
+     */
+    @SuppressLint("NonConstantResourceId")
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.item0:
+                Intent goToHome = new Intent(EventList.this, MainActivity.class);
+                startActivity(goToHome);
+                break;
+
+            case R.id.item1:
+                Intent goToTicket = new Intent(EventList.this, TicketSearchActivity.class);
+                startActivity(goToTicket);
+                break;
+
+            case R.id.help_id:
+                String title = getResources().getString(R.string.how_to_search);
+                String line2 = getResources().getString(R.string.help);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setTitle(title)
+                        .setMessage(line2 + " \n").setNegativeButton(R.string.close, (click, arg) -> {
+                })
+                        .create().show();
+                break;
+        }
+        DrawerLayout drawerLayout = findViewById(R.id.main_drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     /**
      * create ListAdapter with getCount(), getItem, getItemId, and getView methods
