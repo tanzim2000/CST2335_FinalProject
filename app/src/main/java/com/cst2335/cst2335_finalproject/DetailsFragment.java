@@ -8,11 +8,15 @@ package com.cst2335.cst2335_finalproject;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +24,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.navigation.NavigationView;
+
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
@@ -76,6 +83,7 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,  ViewGroup parent,
                              Bundle savedInstanceState) {
 
+
         // Inflate the xml file for the fragment
         return inflater.inflate(R.layout.fragment_details, parent, false);
     }
@@ -92,6 +100,12 @@ public class DetailsFragment extends Fragment {
         //getArgument from CharRoom to Fragment
         Button button = view.findViewById(R.id.savetofav);
         button.setOnClickListener(view1 -> {
+            String thisName = event.getEventName();
+            String thisData = event.getStartDate();
+           // Cursor query = eventDB.rawQuery("count * from "+ MyOpener.TABLE_NAME+ " where " +
+            //        MyOpener.COL_EventName+ "=" + thisName +" and "+
+            //        MyOpener.COL_StartDate+"="+thisData+";" , null);
+            //if(query.getCount()==0){
             ContentValues newRow = new ContentValues();
             newRow.put(MyOpener.COL_EventName, event.getEventName());
             newRow.put(MyOpener.COL_URL, event.getTicketMasterURL());
@@ -99,7 +113,11 @@ public class DetailsFragment extends Fragment {
             newRow.put(MyOpener.COL_MIN_Price, event.getMinPrice());
             newRow.put(MyOpener.COL_MAX_Price, event.getMaxPrice());
             newRow.put(MyOpener.COL_IMG, event.getImgURL());
-            long id = eventDB.insert(MyOpener.FAVORITE_TABLE_NAME, null, newRow);
+
+            long id=eventDB.insertWithOnConflict(MyOpener.FAVORITE_TABLE_NAME,
+                    null, newRow,SQLiteDatabase.CONFLICT_IGNORE);
+            //}
+
             AlertDialog.Builder builder = new AlertDialog.Builder(DetailsFragment.super.getActivity());
             AlertDialog dialog = builder.setMessage(R.string.saved_favorites)
                     .setPositiveButton("OK", (d, w) -> {  /* nothing */})

@@ -96,7 +96,7 @@ public class EventList extends AppCompatActivity implements NavigationView.OnNav
         ListView myList = findViewById(R.id.theListView);
         myList.setAdapter( myAdapter = new MyListAdapter()); //display the ListView to Adapter
 
-        //click an item to open a dialog
+        //click an item to open a dialog to launch to fragment page
         myList.setOnItemClickListener( (listView, view, pos, id) -> {
 
             //setArguments for the Fragment
@@ -150,6 +150,7 @@ public class EventList extends AppCompatActivity implements NavigationView.OnNav
                 }).create().show();
                 return true;
         });
+
         //add a navigation drawer
         DrawerLayout drawer = findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
