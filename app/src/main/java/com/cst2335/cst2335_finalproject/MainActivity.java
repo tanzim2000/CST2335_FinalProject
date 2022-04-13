@@ -26,6 +26,7 @@ import android.widget.Button;
 import com.google.android.material.navigation.NavigationView;
 
 /**
+ * 2022.4.13 final version updated
  * Ticket Master main class with user tool bar, navigation bar, buttons
  * inheritance AppCompatActivity, and implements NavigationView.OnNavigationItemSelectedListener
  */
